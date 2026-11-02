@@ -150,6 +150,99 @@
   .coltitle{font-weight:700;font-size:1rem;margin:6px 0 4px;color:#3b3a36}
   .colbox p{margin:0;line-height:1.85}
   .colbox .kw{font-size:1.08em}
+
+  /* ===== 場面イラスト（スマホ画面） ===== */
+  .scene{max-width:290px;margin:2px auto 14px;background:#33403b;border-radius:26px;padding:9px 8px 12px;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+  .scene .notch{width:64px;height:6px;border-radius:6px;background:#1f2724;margin:0 auto 7px}
+  .scr{background:#fff;border-radius:18px;overflow:hidden;font-size:.9rem;line-height:1.55}
+  .sbar{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:.78rem;font-weight:700;color:#fff}
+  .sbar .ic{font-size:1.05rem}
+  .sbar .who{margin-left:auto;font-weight:500;opacity:.9}
+  .sbody{padding:12px 12px 14px;background:#f3f1ec;min-height:70px}
+  .sbub{position:relative;display:inline-block;max-width:88%;background:#fff;border-radius:4px 14px 14px 14px;padding:8px 11px;box-shadow:0 1px 2px rgba(0,0,0,.08);animation:bubin .45s ease both}
+  .sname{font-size:.7rem;color:var(--sub);margin-bottom:3px}
+  .slink{display:block;margin-top:5px;color:#1a6fd1;text-decoration:underline;font-size:.85rem}
+  @keyframes bubin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .sc-sms .sbar{background:#4f8a5b}
+  .sc-chat .sbar{background:#3f9b6a}
+  .sc-game .sbar{background:#6a5acd} .sc-game .sbody{background:#efedfb}
+  .sc-mail .sbar{background:#5f7f74} .sc-mail .sbody{background:#fff}
+  .sc-mail .subj{font-weight:700;border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:6px}
+  .sc-call .scr{background:linear-gradient(#3d4a5c,#1f2633);color:#fff;text-align:center;padding:18px 12px 16px}
+  .sc-call .av{width:58px;height:58px;border-radius:50%;background:#7b8799;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+  .sc-call .cname{font-weight:700;font-size:1rem}
+  .sc-call .ctag{font-size:.72rem;opacity:.75;margin-bottom:10px}
+  .sc-call .cmsg{background:rgba(255,255,255,.14);border-radius:12px;padding:8px 10px;font-size:.88rem;text-align:left;animation:bubin .45s ease both}
+  .sc-call .cbtn{display:flex;justify-content:space-around;margin-top:12px}
+  .sc-call .cbtn span{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+  .sc-call .cbtn .r{background:#e0533d} .sc-call .cbtn .g{background:#46b05a}
+  .sc-web .sbar{background:#e9e6df;color:#5a564e;font-weight:500}
+  .sc-web .addr{flex:1;background:#fff;border-radius:8px;padding:2px 8px;font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sc-web .whead{background:#1f3c78;color:#fff;font-weight:700;padding:8px 12px;font-size:.85rem}
+  .sc-web .sbody{background:#fff}
+  .sc-web .wform{margin-top:8px;border:1.5px solid #c9c4b8;border-radius:6px;padding:5px 8px;color:#aaa;font-size:.78rem}
+  .sc-notif .scr{background:linear-gradient(160deg,#8fb3c9,#c9b7d6);padding:16px 10px 18px}
+  .sc-notif .time{text-align:center;color:#fff;font-size:1.9rem;font-weight:700;letter-spacing:.04em;margin-bottom:10px}
+  .sc-notif .ncard{background:rgba(255,255,255,.88);border-radius:14px;padding:8px 11px;animation:bubin .45s ease both}
+  .sc-notif .napp{font-size:.7rem;color:var(--sub);font-weight:700}
+  .sc-popup .scr{background:#d9e3ea;padding:14px 10px}
+  .sc-popup .win{background:#fff;border:3px solid #c0392b;border-radius:10px;overflow:hidden;animation:shake .5s ease .2s both}
+  .sc-popup .wt{background:#c0392b;color:#fff;font-weight:700;padding:5px 10px;font-size:.82rem}
+  .sc-popup .wb{padding:9px 11px;font-weight:700;color:#8e2a1c}
+  .sc-popup .tel{margin-top:6px;background:#fbe3dd;border-radius:6px;text-align:center;padding:4px;font-size:.85rem}
+  @keyframes shake{0%,100%{transform:none}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+
+  /* ===== 解説：ルナの判定＋ポイント3つ ===== */
+  .verdict{display:flex;align-items:center;gap:10px;margin-top:16px;padding:10px 12px;border-radius:14px}
+  .verdict.ok{background:var(--ok-soft)} .verdict.ng{background:var(--ng-soft)}
+  .verdict .vface{width:54px;height:54px;flex:none} .verdict .vface svg{width:100%;height:100%}
+  .verdict b{display:block;font-size:1.15rem}
+  .verdict.ok b{color:var(--ok)} .verdict.ng b{color:var(--ng)}
+  .verdict span{font-size:.85rem;color:#5a564e}
+  .pts{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .pts li{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;font-size:.95rem;font-weight:700;line-height:1.55;animation:bubin .4s ease both}
+  .pts li:nth-child(2){animation-delay:.12s} .pts li:nth-child(3){animation-delay:.24s}
+  .pts .pn{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;margin-top:1px}
+  .pts li:nth-child(1) .pn{background:#d79a5c} .pts li:nth-child(2) .pn{background:#5f7f74} .pts li:nth-child(3) .pn{background:#4a7fa3}
+  .pts .kw{font-size:1.05em}
+  details.more{margin-top:8px;font-size:.88rem;color:#5a564e}
+  details.more summary{cursor:pointer;color:var(--accent);font-weight:700;list-style:none}
+  details.more summary::-webkit-details-marker{display:none}
+  details.more[open] summary{margin-bottom:4px}
+  details.more div{background:#fff;border-radius:10px;padding:8px 12px}
+
+  /* ===== コラム（タップで開く） ===== */
+  details.colbox summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer}
+  details.colbox summary::-webkit-details-marker{display:none}
+  details.colbox .colface{width:42px;height:42px}
+  details.colbox .cst{flex:1;min-width:0}
+  details.colbox .cst small{display:block;font-size:.72rem;color:#a0794a;font-weight:700}
+  details.colbox .cst b{display:block;font-size:.98rem;color:#3b3a36;line-height:1.45}
+  details.colbox .open{flex:none;font-size:.75rem;font-weight:700;color:#fff;background:#d79a5c;border-radius:999px;padding:3px 10px}
+  details.colbox[open] .open{background:#bfb6a6}
+  details.colbox p{margin-top:10px;border-top:1px dashed #e8dcc4;padding-top:10px}
+
+  /* ===== スタンプカード ===== */
+  .stampcard{background:#fffaf0;border:2px solid #ecd9b4;border-radius:18px;padding:14px 12px 12px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+  .sctop{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .sctop .scf{width:40px;height:40px;flex:none} .sctop .scf svg{width:100%;height:100%}
+  .sctop b{font-size:1rem;color:#8a5a2b}
+  .sctop .cnt{margin-left:auto;font-size:.82rem;color:#8a5a2b;background:#f6e8cf;border-radius:999px;padding:2px 10px;font-weight:700}
+  .sgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .stile{all:unset;position:relative;aspect-ratio:1;border-radius:50%;border:2px dashed #e1cfab;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.62rem;color:#b9a682;cursor:pointer;line-height:1.1}
+  .stile .dn{font-size:.82rem;font-weight:700}
+  .stile.today{border:2.5px solid #d79a5c;color:#a0794a}
+  .stile.future{cursor:default;opacity:.55}
+  .stile.goal{border-style:solid;border-color:#e98a8a;background:#fdeeee}
+  .stile .paw{position:absolute;inset:6%;transform:rotate(-12deg)}
+  .stile .paw svg{width:100%;height:100%}
+  .stile.on{border-style:solid;border-color:#e9b9ae;background:#fff6f3}
+  .stile.on .dn,.stile.on .sc{position:relative;z-index:1;color:#fff;text-shadow:0 0 3px #c0392b}
+  .stile.on.new .paw{animation:stampin .5s cubic-bezier(.3,1.6,.5,1) both}
+  @keyframes stampin{from{transform:scale(2.2) rotate(-30deg);opacity:0}to{transform:rotate(-12deg);opacity:1}}
+  .scnext{margin-top:10px;text-align:center;font-size:.85rem;color:#8a5a2b;font-weight:700}
+  .schint{text-align:center;font-size:.72rem;color:var(--sub);margin-top:2px}
+  .review .qmsg{margin:4px 0 2px;background:#f3f1ec;border-radius:8px;padding:5px 10px;font-size:.85rem;color:#5a564e}
   footer{text-align:center;color:var(--sub);font-size:.78rem;margin-top:28px}
 </style>
 </head>
@@ -163,7 +256,7 @@
   <div class="mascot" id="mascot"><div class="face" id="lunaFace"></div><div class="bubble"><span class="nm">ルナ</span><span id="lunaSay"></span></div></div>
   <main id="app"></main>
   <div id="menu"></div>
-  <h2>これまでの問題</h2>
+  <h2>これまでの記録</h2>
   <div class="hist" id="hist"></div>
   <footer>毎朝6時ごろ、新しい5問が届きます。<br>記録はこの端末の中にだけ保存されます。</footer>
 </div>
@@ -173,27 +266,27 @@ const DAYS = [
 {
   day: 1, v: 2, date: "2026-11-02", level: "Lv.1 超入門", theme: "だまされない基本",
   qs: [
-    { q: "「お荷物をお届けしましたが不在のため持ち帰りました。こちらから確認ください」というSMS（ショートメッセージ）が届きました。いちばん安全な対応は？",
+    { q: "こんなSMS（ショートメッセージ）が届きました。いちばん安全な対応は？", scene: {"t": "sms", "from": "知らない番号", "msg": "お荷物をお届けしましたが不在のため持ち帰りました。こちらから確認ください", "link": true}, pts: ["宅配業者をよそおう**偽SMS**はとても多い", "リンク先は偽サイト。情報やお金を盗まれる", "**公式アプリや伝票の番号**で自分で確認する"],
       c: ["リンクを押して再配達を申し込む", "リンクは押さず、宅配会社の公式アプリや伝票の番号で確認する", "返信して本物かどうか聞いてみる", "友だちに転送して意見を聞く"],
       a: 1,
       e: "宅配業者をよそおった**偽SMS**はとても多い手口です。リンク先は偽サイトで、個人情報やカード番号を盗まれたり、ウイルス入りのアプリを入れさせられたりします。**届いたリンクは使わず**、自分で**公式アプリやブックマークから確認**するのが鉄則です。",
       img: "sms", colt: "偽SMSはなぜ本物そっくり？", col: "偽SMSは、宅配会社や銀行、携帯会社など、だれもが使う会社の名前をかたって送られてきます。たくさんの人に一斉に送れば、ちょうど荷物を待っている人が引っかかるからです。リンク先のサイトも、ロゴや色まで**本物そっくり**に作られています。SMSは送り主の名前を偽ることもでき、本物の会社からのメッセージと同じ画面に並ぶこともあります。「見た目で見分ける」より「**リンクは使わない**」と決めておくのがいちばん確実です。", ng: "SMSやメールに届いたリンクを押す", ok: "宅配会社の公式アプリや、伝票の番号で確認する" },
-    { q: "次のうち、いちばん破られにくいパスワードはどれ？",
+    { q: "次のうち、いちばん破られにくいパスワードはどれ？", pts: ["いちばん効くのはパスワードの**長さ**", "誕生日・名前・よくある単語は一瞬で破られる", "関係ない単語をつなげて**12文字以上**に"],
       c: ["kitsune-ame-tsukimi-28yama", "20080315（誕生日）", "password123", "sakura"],
       a: 0,
       e: "パスワードは「**長さ**」がいちばん効きます。誕生日や名前、よくある単語は、機械で一瞬で試されてしまいます。関係のない単語をいくつかつなげると、長くて覚えやすいパスワードになります。目安は**12文字以上**で、ゲームやSNSのアカウントも同じです。",
       img: "key", colt: "長さが効くのはなぜ？", col: "パスワードを破る方法のひとつに、機械で組み合わせを片っぱしから試す「**総当たり**」があります。1文字増えるごとに組み合わせの数はかけ算で増えるので、長くするほど時間がかかり、現実的には破れなくなります。一方、誕生日や名前、よく使われる単語は、最初に試される「よくあるパスワード」に入っていることが多く、すぐに破られてしまいます。関係のない単語を3〜4個つなげると、**長くて覚えやすく、推測もされにくい**パスワードになります。", rep: "password", ng: "誕生日・名前・よくある単語をパスワードにする", ok: "関係のない単語をつなげて、12文字以上にする" },
-    { q: "オンラインゲームで仲良くなった人から「レアアイテムをプレゼントしたいから、ログインIDとパスワードを教えて」とメッセージが来ました。どうする？",
+    { q: "オンラインゲームで仲良くなった人から、こんなメッセージが来ました。どうする？", scene: {"t": "game", "from": "ゲーム仲間", "msg": "レアアイテムをプレゼントしたいから、ログインIDとパスワード教えて！"}, pts: ["教えると**アカウントを乗っ取られる**", "パスワードを聞いてくる人は、友だちでも運営でもいない", "やりとりをやめて、**ブロック・通報・家族に相談**"],
       c: ["仲良しだから、IDとパスワードを教える", "IDもパスワードも教えず、やりとりをやめる。しつこければブロック・通報する", "パスワードを少しだけ変えて教える", "IDだけなら教えても大丈夫"],
       a: 1,
       e: "IDとパスワードを教えると、**アカウントを乗っ取られ**て、アイテムやお金を取られたり、あなたのふりをして友だちに詐欺のメッセージを送られたりします。友だちでも運営の人でも、**パスワードを聞いてくる人はいません**。困ったら、家族やゲームの運営に相談しましょう。",
       img: "sns", colt: "アカウントは大切な「財産」", col: "ゲームやSNSのアカウントには、課金したアイテムや友だちとのつながり、写真や思い出がつまっています。だからこそ、それをねらう人がいます。乗っ取られると、アイテムを売られたり、あなたのふりをして友だちにだましのメッセージを送られたりすることもあります。「プレゼントする」「手伝ってあげる」など、**親切な言葉で近づいてくる**のがよくある手口です。パスワードは**だれにも教えない**、と決めておきましょう。", ng: "ゲームやSNSで知り合った人に、IDやパスワードを教える", ok: "やりとりをやめて、ブロックやゲームの運営に通報する" },
-    { q: "「警察です。あなたの口座が犯罪に使われています。LINEのビデオ通話で取り調べをします」と電話が来ました。画面には制服姿の人と逮捕状が映っています。どうする？",
+    { q: "こんな電話が来て、ビデオ通話の画面には制服姿の人と逮捕状が映っています。どうする？", scene: {"t": "call", "from": "警察を名乗る人", "icon": "👮", "msg": "警察です。あなたの口座が犯罪に使われています。LINEのビデオ通話で取り調べをします"}, pts: ["これは**ニセ警察詐欺**。2026年1〜6月の被害は約508億円", "警察が**ビデオ通話で取り調べ**や逮捕状を見せることはない", "電話を切って**#9110か家族に相談**"],
       c: ["本物の警察だと思うので、言われたとおりお金を振り込む", "身の潔白を証明するため、口座番号や暗証番号を伝える", "電話を切り、自分で調べた警察署の番号か「#9110」に相談する", "「家族には内緒に」と言われたので、ひとりで対応する"],
       a: 2,
       e: "これは「**ニセ警察詐欺**」です。警察庁によると、2026年1〜6月の被害額は約508億円で、前の年の同じ時期より約109億円増えています。警察庁は、**警察がビデオ通話で取り調べをしたり、サイトで逮捕状を見せたりすることはない**と注意を呼びかけています。2026年9月の民間の調査では、20代の約半数がこの手口を「知らない」と答えていて、若い人も他人ごとではありません。",
       img: "phone", colt: "なぜ信じてしまうの？", col: "ニセ警察詐欺では、犯人が**本物の警察署と同じ番号に見せかけて**電話をかけてきたり、制服姿でビデオ通話に出てきたり、本物そっくりの逮捕状を見せたりします。「あなたが事件に関わっている」と言われると、だれでも不安になって冷静さを失います。さらに「秘密の捜査だから家族にも言わないで」と**口止め**して、相談させないようにするのも特徴です。少しでもおかしいと思ったら、いったん電話を切り、家族や#9110に相談しましょう。", news: true, ng: "警察を名乗る相手の指示で、お金を振り込む・口座の情報を伝える", ok: "すぐ電話を切り、#9110（警察相談専用電話）か家族に相談する" },
-    { q: "「二段階認証（2段階認証）」の説明として正しいのはどれ？",
+    { q: "「二段階認証（2段階認証）」の説明として正しいのはどれ？", pts: ["パスワード＋スマホに届くコードなど**別の確認**", "パスワードが盗まれても**ログインを防げる**", "届いたコードは**絶対に人に教えない**"],
       c: ["パスワードを2回入力すること", "パスワードを2つ用意して交互に使うこと", "ログインを2回に1回にする設定", "パスワードに加えて、スマホに届く番号など“別の確認”も求める仕組み"],
       a: 3,
       e: "二段階認証は、パスワードが盗まれても、**スマホに届くコード**など「本人の手元にあるもの」がないとログインできない仕組みです。GmailやLINE、Instagram、ゲームのアカウント、ネット銀行など大事なサービスでは、ぜひ**オンに**しておきましょう。ただし、そのコードを**人に教えるのは絶対にNG**です。",
@@ -203,27 +296,27 @@ const DAYS = [
 {
   day: 2, v: 2, date: "2026-11-03", level: "Lv.1 超入門", theme: "本物そっくりに注意",
   qs: [
-    { q: "警察を名乗る人に「詳しくは警察のホームページを見て」と言われ、教えられたサイトを開くと、警察そっくりのデザインでした。どうする？",
+    { q: "警察を名乗る人に「詳しくはホームページを見て」と言われ、教えられたサイトを開くとこんな画面でした。どうする？", scene: {"t": "web", "from": "◯◯県警察", "addr": "本物そっくりのアドレス", "msg": "【重要】あなたが関わる事件について捜査中です。下のフォームに情報を入力してください。"}, pts: ["2026年9月ごろ、警察そっくりの**偽サイト**が見つかった", "**相手に教えられたサイト**は確認にならない", "電話を切って、**自分で調べた番号か#9110**へ"],
       c: ["公式サイトに見えるので、書かれた指示に従う", "デザインが本物そっくりなので、信用して連絡先を入力する", "そのサイトは信用せず、電話を切って自分で調べた警察署の番号や「#9110」に相談する", "サイトのお問い合わせ先に電話して確かめる"],
       a: 2,
       e: "2026年9月ごろ、警視庁や一部の県警の公式サイトに**よく似た偽サイト**が見つかり、警察庁などが注意を呼びかけました。ニセ警察詐欺では、**見た目が本物そっくり**でも信用できません。警察が**ホームページを見せて個人情報の入力やお金の話をする**ことはないので、電話を切って**#9110**や家族に相談しましょう。",
       img: "alert", colt: "「公式サイト」の落とし穴", col: "偽サイトは、ロゴや色づかいまで本物をまねて作られています。犯人は「ほら、公式サイトにも書いてあるでしょう」と見せることで、相手を安心させようとします。ここで大事なのは、**相手から教えられたサイトは確認にならない**ということです。本物かどうかを確かめたいときは、**自分で調べた番号**にかけ直すか、#9110に相談します。「相手が見せてきたもので確かめない」と覚えておきましょう。", news: true, ng: "相手に教えられたサイトや番号を、確認のために使う", ok: "電話を切り、自分で調べた番号か#9110、家族に相談する" },
-    { q: "スマホに「アップデートがあります」という通知が毎日出ますが、いつも「あとで」を押しています。このままだとどうなる？",
+    { q: "毎日こんな通知が出ますが、いつも「あとで」を押しています。このままだとどうなる？", scene: {"t": "notif", "from": "設定", "icon": "⚙️", "msg": "ソフトウェアアップデートがあります。\n［今すぐインストール］［あとで］"}, pts: ["アップデートには**弱点（脆弱性）をふさぐ修正**が入っている", "「あとで」の間は、その弱点を**ねらわれやすい**", "設定→一般→ソフトウェアアップデートで**自動をオン**"],
       c: ["古いままだと、見つかった弱点（脆弱性）をねらわれやすくなる", "スマホが軽くなって、むしろ安全になる", "アップデートしてもしなくても、安全さは変わらない", "新しい機能が使えないだけで、安全面は問題ない"],
       a: 0,
       e: "アップデートには、新しい機能だけでなく、見つかった**弱点（脆弱性）をふさぐ修正**が入っています。古いままだと、その弱点をねらうウイルスや攻撃を受けやすくなります。iPhoneなら、**「設定」→「一般」→「ソフトウェアアップデート」**を開き、**自動アップデートをオン**にしておくと、寝ている間に更新されて手間がかかりません。",
       img: "update", colt: "「あとで」が一番あぶない", col: "弱点が見つかって修正版が出ると、その弱点の情報も世の中に知られます。すると、まだ更新していない人が**ねらい目**になります。つまり、「あとで」を続けるほど、無防備な期間が長くなるのです。アップデートは、家の鍵の修理のようなものです。新しい鍵が届いたのに、ずっと古い鍵のまま出かける人はいませんよね。充電しながら寝る前に、5分でできます。", rep: "update", ng: "アップデートの通知を、ずっと「あとで」にし続ける", ok: "今日、設定の「ソフトウェアアップデート」を開いて、自動アップデートをオンにする" },
-    { q: "友だちと撮った写真をSNSに投稿するとき、いちばん気をつけたいことはどれ？",
+    { q: "友だちと撮った写真をSNSに投稿するとき、いちばん気をつけたいことはどれ？", pts: ["写真は消しても**コピーが残る**ことがある", "制服・看板・景色から**場所がわかる**ことも", "**公開範囲と写り込み**を確認してから投稿"],
       c: ["公開範囲は初期設定のままでよい", "友だちは気にしないので、顔が写っていても確認せず投稿する", "自分の顔だけ隠せば、ほかは写っていても問題ない", "公開範囲を確認し、友だちや背景（制服・看板・家の周り）も確認してから投稿する"],
       a: 3,
       e: "SNSの写真は、一度出ると**消してもコピーが残る**ことがあります。公開範囲が「全員」だと、知らない人にも見られます。**友だちの顔**や、**制服・看板・家の周りの景色**から、通っている場所や住んでいる場所が特定されることもあります。投稿前に**公開範囲**と**写り込み**を確認しましょう。",
       img: "sns", colt: "背景から場所がバレる？", col: "写真の中には、本人が気づかない情報がたくさんあります。たとえば制服や校章、駅の名前、近所のお店の看板、窓の外の景色などです。これらを組み合わせると、**どこにいるのか、どこに住んでいるのか**を、知らない人が推測できてしまうことがあります。友だちが写っている場合は、**投稿していいか本人に聞く**のもマナーです。迷ったら、投稿しない選択も大切です。", ng: "公開範囲も写り込みも確認せず、友だちの写真を投稿する", ok: "投稿前に公開範囲を「友だちだけ」などにして、背景も確認する" },
-    { q: "ゲーム仲間から「コンビニで買った電子マネーのコードを教えてくれたら、課金アイテムを半額で買ってあげるよ」と言われました。どうする？",
+    { q: "ゲーム仲間から、こんなメッセージが来ました。どうする？", scene: {"t": "game", "from": "ゲーム仲間", "msg": "コンビニで買った電子マネーのコード教えてくれたら、課金アイテム半額で買ってあげるよ！"}, pts: ["電子マネーのコードは**教えた時点でお金として使われる**", "「半額で買ってあげる」は**代行詐欺**のよくある形", "課金は**公式ストアだけ**。誘われたら家族や運営に相談"],
       c: ["半額はお得なので、コードを教える", "コードは教えず、やりとりをやめて、保護者やゲームの運営に相談する", "一部のコードだけ教えて様子を見る", "友だちにも教えて、いっしょに頼む"],
       a: 1,
       e: "電子マネーのコードは、**番号を教えただけでお金として使われてしまう**ので、取り戻すのがとても難しいです。「半額で買ってあげる」という誘いは**代行詐欺**のよくある形で、コードだけ取られて何も届かないことがあります。誘われたら、**やりとりをやめて**、家族やゲームの運営に相談しましょう。困ったら**188**（消費者ホットライン）でも相談できます。",
       img: "card", colt: "コードは「現金」と同じ", col: "電子マネーのコードは、番号を相手に伝えた時点で、その金額を使える状態になります。カードと違って、本人確認がなく、あとから止めるのが難しいのが特徴です。だから詐欺をする人は、お金を直接受け取らずに**コードを聞き出そう**とします。「お得」「半額」「特別に」という言葉は、だます側がよく使う誘い文句です。ゲームの課金は、**公式のストアからだけ**行いましょう。", ng: "電子マネーのコードを、ゲーム仲間や知らない人に教える", ok: "課金は公式のストアだけで行い、誘われたら保護者や運営に相談する" },
-    { q: "パソコンでネットを見ていたら、突然大きな警告音が鳴り、「ウイルスに感染しました！今すぐこの番号に電話してください」と画面に出ました。どうする？",
+    { q: "パソコンでネットを見ていたら、突然大きな警告音が鳴り、こんな画面が出ました。どうする？", scene: {"t": "popup", "from": "セキュリティ警告", "msg": "ウイルスに感染しました！\n今すぐこの番号に電話してください", "tel": "＊＊＊＊-＊＊-＊＊＊＊"}, pts: ["これは**サポート詐欺**。警告は偽物", "電話すると**遠隔操作やお金の請求**をされる", "**ブラウザを閉じる**（だめなら強制終了）だけで大丈夫"],
       c: ["表示された番号に電話して、指示を聞く", "ブラウザを閉じる（閉じられなければ強制終了する）。電話はしない", "画面に出た「修復」ボタンを押す", "案内されたソフトをダウンロードする"],
       a: 1,
       e: "これは**サポート詐欺**で、警告は**偽物**です。電話すると、遠隔操作のソフトを入れさせられたり、サポート料としてお金を請求されたりします。ブラウザを**閉じる（閉じられなければ強制終了する）だけ**で、パソコンが壊れることはありません。もし電話してしまっても、まだお金を払っていなければ、**払わずに**家族や#9110、188に相談しましょう。",
@@ -294,6 +387,36 @@ function illus(q){
   const k = (q.img && ICONS[q.img]) ? q.img : guessIcon(q);
   return `<div class="illus"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${ICONS[k]}</svg></div>`;
 }
+
+// ===== 場面イラスト =====
+function esc(t){ return String(t).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function scene(q){
+  const s = q.scene; if (!s) return illus(q);
+  const t = s.t || "sms", from = esc(s.from||""), msg = esc(s.msg||"").replace(/\n/g,"<br>");
+  const link = s.link ? `<span class="slink">▶ ${esc(s.link===true?"こちらから確認":s.link)}</span>` : "";
+  let inner = "";
+  if (t==="call"){
+    inner = `<div class="av">${s.icon||"👮"}</div><div class="cname">${from}</div><div class="ctag">${esc(s.sub||"着信中…")}</div><div class="cmsg">${msg}</div><div class="cbtn"><span class="r">📵</span><span class="g">📞</span></div>`;
+  } else if (t==="web"){
+    inner = `<div class="sbar"><span>🔒</span><span class="addr">${esc(s.addr||"本物そっくりのサイト")}</span></div><div class="whead">${from}</div><div class="sbody">${msg}<div class="wform">お名前・口座番号を入力…</div></div>`;
+  } else if (t==="notif"){
+    inner = `<div class="time">7:30</div><div class="ncard"><div class="napp">${s.icon||"⚙️"} ${from}</div>${msg}</div>`;
+  } else if (t==="popup"){
+    inner = `<div class="win"><div class="wt">⚠️ ${from||"警告"}</div><div class="wb">${msg}${s.tel?`<div class="tel">☎ ${esc(s.tel)}</div>`:""}</div></div>`;
+  } else if (t==="mail"){
+    inner = `<div class="sbar"><span class="ic">✉️</span>メール<span class="who">${from}</span></div><div class="sbody">${s.subj?`<div class="subj">${esc(s.subj)}</div>`:""}${msg}${link}</div>`;
+  } else {
+    const head = {sms:["💬","メッセージ（SMS）"],chat:["💚","トーク"],game:["🎮","ゲーム内チャット"],dm:["📷","SNSのDM"]}[t] || ["💬","メッセージ"];
+    inner = `<div class="sbar"><span class="ic">${head[0]}</span>${head[1]}</div><div class="sbody"><div class="sname">${from}</div><div class="sbub">${msg}${link}</div></div>`;
+  }
+  return `<div class="scene sc-${t==="dm"?"chat":t}"><div class="notch"></div><div class="scr">${inner}</div></div>`;
+}
+function explain(q, ok){
+  const head = `<div class="verdict ${ok?"ok":"ng"}"><span class="vface">${luna(ok?"happy":"sad")}</span><div><b>${ok?"⭕ 正解！":"❌ ざんねん…"}</b><span>${ok?"さすが！ポイントをおさらいだワン":"だいじょうぶ、ここで覚えればOKだワン"}</span></div></div>`;
+  if (!q.pts || !q.pts.length) return head + `<div class="result ${ok?"ok":"ng"}" style="margin-top:8px">${rich(q.e)}</div>`;
+  return head + `<ol class="pts">${q.pts.map((t,i)=>`<li><span class="pn">${i+1}</span><span>${rich(t)}</span></li>`).join("")}</ol>` + (q.e?`<details class="more"><summary>▶ くわしい解説を読む</summary><div>${rich(q.e)}</div></details>`:"");
+}
+const PAW = `<svg viewBox="0 0 40 40"><g fill="#d2533e" opacity=".88"><ellipse cx="20" cy="26" rx="9.5" ry="8"/><ellipse cx="9.5" cy="15.5" rx="3.8" ry="4.8"/><ellipse cx="16.5" cy="9.5" rx="3.8" ry="5"/><ellipse cx="23.5" cy="9.5" rx="3.8" ry="5"/><ellipse cx="30.5" cy="15.5" rx="3.8" ry="4.8"/></g></svg>`;
 const HAT2 = `<g transform="rotate(-14 60 14)"><path d="M47 26 L60 -12 L73 26 Z" fill="#9cc7e8"/><path d="M50 17 L70 17 M53.5 7 L66.5 7" stroke="#fff" stroke-width="3.2"/><circle cx="60" cy="-12" r="5.5" fill="#f2c94c"/><path d="M46 26 Q60 31 74 26" stroke="#f2c94c" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
 const CROWN2 = `<path d="M42 30 L44 8 L52 19 L60 2 L68 19 L76 8 L78 30 Z" fill="#f2c94c" stroke="#d4a017" stroke-width="2.4" stroke-linejoin="round"/><circle cx="60" cy="16" r="3" fill="#e98a8a"/><circle cx="50" cy="24" r="2" fill="#9cc7e8"/><circle cx="70" cy="24" r="2" fill="#9cc7e8"/>`;
 function lunaSit(face1, face2, acc){
@@ -402,7 +525,7 @@ function fmt(ds){ const [y,m,d]=ds.split("-"); return `${+m}月${+d}日`; }
 function rich(t){ return String(t).replace(/\*\*(.+?)\*\*/g, "<b class=\"kw\">$1</b>"); }
 function column(q){
   if (!q.col) return "";
-  return `<div class="colbox"><div class="colhead"><span class="colface">${luna("normal")}</span><span>📖 ルナのひとくちコラム</span></div><div class="coltitle">${q.colt||""}</div><p>${rich(q.col)}</p></div>`;
+  return `<details class="colbox"><summary><span class="colface">${luna("normal")}</span><span class="cst"><small>📖 ルナのひとくちコラム</small><b>${q.colt||"もっと知りたい人へ"}</b></span><span class="open">読む ▼</span></summary><p>${rich(q.col)}</p></details>`;
 }
 function tips(q){
   let h = "";
@@ -452,7 +575,7 @@ function startReview(key){
   const day = key==="y" ? yDay : wDay; if(!day) return;
   const qs = day.qs.map((q,i)=>{
     const order = shuffle(q.c.map((_,k)=>k));
-    return { q:q.q, c:order.map(k=>q.c[k]), a:order.indexOf(q.a), e:q.e, ng:q.ng, ok:q.ok, img:q.img, news:q.news, col:q.col, colt:q.colt, label:`第${i+1}問` };
+    return { q:q.q, c:order.map(k=>q.c[k]), a:order.indexOf(q.a), e:q.e, ng:q.ng, ok:q.ok, img:q.img, news:q.news, col:q.col, colt:q.colt, scene:q.scene, pts:q.pts, label:`第${i+1}問` };
   });
   S = { mode:"review", key, day, qs, idx:0, picks:[] };
   $("meta").textContent = `${day.day}日目（${fmt(day.date)}）・テーマ：${day.theme}`;
@@ -507,7 +630,7 @@ function dots(){
 function showQ(){
   const q = S.qs[S.idx];
   $("app").innerHTML = `<div class="card">${dots()}
-    ${illus(q)}<div class="qnum">${q.label} / ${S.qs.length}${q.news?` <span class="newb">🆕 最近の手口</span>`:""}</div>
+    ${scene(q)}<div class="qnum">${q.label} / ${S.qs.length}${q.news?` <span class="newb">🆕 最近の手口</span>`:""}</div>
     <div class="qtext">${q.q}</div>
     <div class="choices">${q.c.map((t,i)=>`<button class="choice" data-i="${i}">${t}</button>`).join("")}</div>
     <div id="res"></div></div>`;
@@ -526,7 +649,7 @@ function answer(i){
   const ok = i === q.a;
   say(ok ? pick(["正解だワン！🐾","さすが！その調子！","バッチリ見やぶったね！"]) : pick(["おっと！ここは気をつけてほしいワン","だまされやすいところだワン。赤い箱をよく見てね"]), ok?"happy":"sad");
   const last = S.idx === S.qs.length - 1;
-  $("res").innerHTML = `<div class="result ${ok?"ok":"ng"}"><span class="rh">${ok?"⭕ 正解！":"❌ ざんねん…"}</span>${rich(q.e)}</div>${tips(q)}
+  $("res").innerHTML = `${explain(q, ok)}${tips(q)}
     <button class="btn" id="next">${last?"結果を見る":"次の問題へ"}</button>${column(q)}`;
   $("next").onclick = () => {
     if (last){
@@ -564,10 +687,10 @@ function showSummary(){
     <div class="msg">${msg}</div>
     ${nx ? nextBox(nx) : (S.key ? `<div class="msg" style="margin-top:12px">今日のメニューはこれでおしまいです。おつかれさまでした ☕</div>` : "")}
     <div class="review">${S.qs.map((q,i)=>`<div class="item">
-      <div>${p[i]===q.a?"⭕":"❌"} <b>${q.label}</b>「${q.q}」</div>
+      <div>${p[i]===q.a?"⭕":"❌"} <b>${q.label}</b>「${q.q}」</div>${q.scene?`<div class="qmsg">${q.scene.t==="call"?"📞":q.scene.t==="popup"?"⚠️":"💬"} ${esc(q.scene.msg)}</div>`:""}
       ${p[i]===q.a ? "" : `<div class="mine ngtxt">あなたの選んだ回答：${q.c[p[i]]}</div>`}
       <div class="a">答え：${q.c[q.a]}</div>
-      <div class="exp">${rich(q.e)}</div>${tips(q)}${column(q)}</div>`).join("")}</div>
+      ${q.pts&&q.pts.length?`<ol class="pts">${q.pts.map((t,j)=>`<li><span class="pn">${j+1}</span><span>${rich(t)}</span></li>`).join("")}</ol>`:`<div class="exp">${rich(q.e)}</div>`}${tips(q)}${column(q)}</div>`).join("")}</div>
     <button class="btn ghost" id="retry">もう一度ちょうせんする</button>
   </div>`;
   if (nx) $("goNext").onclick = () => nx.key==="t" ? startStep(nx) : reviewIntro(nx.key, () => startStep(nx));
@@ -587,15 +710,30 @@ function renderMenu(){
   document.querySelectorAll(".mrow").forEach(b => b.onclick = () => startStep(s.find(x=>x.key===b.dataset.k)));
 }
 
+let lastStamps = null;
 function renderHist(){
-  $("hist").innerHTML = list.slice().reverse().map(d=>{
-    const r = getRes(d);
-    const s = r ? `${r.picks.filter((x,i)=>x===d.qs[i].a).length}/5` : "未回答";
-    return `<button class="hrow" data-d="${d.day}"><span>${d.day}日目　${fmt(d.date)}　${d.theme}</span><span class="s ${r?"done":""}">${s}</span></button>`;
-  }).join("");
-  document.querySelectorAll(".hrow").forEach(b => b.onclick = () => startDay(list.find(d=>d.day===+b.dataset.d)));
+  const asc = list.slice();
+  const isOn = d => !!(getRes(d) || (d.day in doneEver));
+  const cnt = asc.filter(isOn).length;
+  const slots = Math.max(7, Math.ceil((asc.length+1)/7)*7);
+  const prev = lastStamps; lastStamps = new Set(asc.filter(isOn).map(d=>d.day));
+  let tiles = "";
+  for (let i=0;i<slots;i++){
+    const d = asc[i];
+    const goal = (i+1)%7===0;
+    if (!d){ tiles += `<span class="stile future ${goal?"goal":""}">${goal?"<span style='font-size:1.1rem'>🍖</span>":`<span class="dn">${i+1}</span>`}</span>`; continue; }
+    const on = isOn(d), r = getRes(d);
+    const sc = r ? `${r.picks.filter((x,k)=>x===d.qs[k].a).length}/5` : (on?"":"まだ");
+    const fresh = on && prev && !prev.has(d.day);
+    tiles += `<button class="stile ${on?"on":""} ${fresh?"new":""} ${d===todayDay?"today":""} ${goal&&!on?"goal":""}" data-d="${d.day}" aria-label="${d.day}日目 ${d.theme}">${on?`<span class="paw">${PAW}</span>`:""}<span class="dn">${d.day}</span><span class="sc">${sc}</span></button>`;
+  }
+  const left = 7 - (cnt % 7);
+  $("hist").innerHTML = `<div class="stampcard"><div class="sctop"><span class="scf">${luna("happy")}</span><b>ルナのスタンプカード</b><span class="cnt">🐾 ${cnt}こ</span></div>
+    <div class="sgrid">${tiles}</div>
+    <div class="scnext">${cnt>0 && cnt%7===0 ? "🍖 7こたまった！ステーキゲットだワン！" : `あと${left}日で 🍖 ステーキのごほうび！`}</div>
+    <div class="schint">スタンプをタップすると、その日の問題を見られるよ</div></div>`;
+  document.querySelectorAll(".stile[data-d]").forEach(b => b.onclick = () => { startDay(list.find(d=>d.day===+b.dataset.d)); toLuna(); });
 }
-
 renderHist();
 startDay(todayDay);
 </script>
