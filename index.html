@@ -342,7 +342,8 @@ const MEADOW = `<svg class="meadow" viewBox="0 0 400 300" preserveAspectRatio="x
 </svg>`;
 const HAT = `<g transform="rotate(-18 40 20)"><path d="M28 30 L40 -6 L52 30 Z" fill="#9cc7e8"/><path d="M31 22 L49 22 M34 13 L46 13" stroke="#fff" stroke-width="3"/><circle cx="40" cy="-6" r="5" fill="#f2c94c"/></g>`;
 const CROWN = `<path d="M40 26 L42 6 L52 18 L60 2 L68 18 L78 6 L80 26 Z" fill="#f2c94c" stroke="#d4a017" stroke-width="2.5" stroke-linejoin="round"/><circle cx="60" cy="16" r="3" fill="#e98a8a"/><circle cx="48" cy="20" r="2.4" fill="#9cc7e8"/><circle cx="72" cy="20" r="2.4" fill="#9cc7e8"/>`;
-function celebrate(kind, onDone){
+function celebrate(kind, onDone, review){
+  const t0 = Date.now();
   const ov = document.createElement("div");
   ov.className = "ov " + kind;
   const colors=["#f2c94c","#e98a8a","#5f7f74","#9cc7e8","#d79a5c"];
@@ -355,6 +356,7 @@ function celebrate(kind, onDone){
   const text = kind==="weekly" ? ["7日がんばったね！","ごほうびのステーキだワン 🍖"]
              : kind==="perfect" ? ["全問正解！すごいワン！","パーフェクトだね 🎉"]
              : ["今日もおつかれさま！","ルナがほめてるワン 🐾"];
+  if (review) text[0] = kind==="perfect" ? "復習も全問正解！" : "復習おつかれさま！";
   if (kind==="weekly"){
     ov.innerHTML = `${MEADOW}${deco}<div class="wtext"><div class="msg2">${text[0]}</div><div class="sub2">${text[1]}</div></div><div class="feast"><div class="hearts">${floats}</div><div class="sitluna">${body}</div>${STEAK}</div><div class="tap">タップでとじる</div>`;
   } else {
@@ -363,7 +365,7 @@ function celebrate(kind, onDone){
   document.body.appendChild(ov);
   let closed = false;
   const close = () => { if (closed) return; closed = true; ov.classList.add("out"); setTimeout(()=>{ ov.remove(); onDone && onDone(); }, 350); };
-  ov.onclick = close;
+  ov.onclick = () => { if (Date.now() - t0 > 1000) close(); };
   setTimeout(close, kind==="weekly" ? 2800 : kind==="perfect" ? 2300 : 2000);
 }
 function say(text, mood){
@@ -540,6 +542,8 @@ function answer(i){
       } else {
         reviews[TODAY] = { ...rvToday(), [S.key]: S.picks }; save(RV_KEY, reviews);
         renderHist(); showSummary(); toLuna();
+        const rperfect = S.picks.every((x,i)=>x===S.qs[i].a);
+        celebrate(rperfect ? "perfect" : "normal", null, true);
       }
     } else { S.idx++; showQ(); }
   };
