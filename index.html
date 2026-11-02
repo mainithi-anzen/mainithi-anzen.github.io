@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>まいにちセキュリティ5問</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<style>
+  :root{
+    --bg:#f5f2ec; --card:#fffdf9; --ink:#3b3a36; --sub:#8a857b; --line:#e4ded3;
+    --accent:#5f7f74; --accent-soft:#e6eee9; --ok:#4f8a5b; --ok-soft:#e5f1e6; --ng:#b4614e; --ng-soft:#f6e6e1;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Maru Gothic ProN","Hiragino Maru Gothic Pro","BIZ UDPGothic","Meiryo",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+  .wrap{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+  header{text-align:center;margin-bottom:18px}
+  header h1{font-size:1.25rem;margin:0;letter-spacing:.05em}
+  header .meta{color:var(--sub);font-size:.85rem;margin-top:4px}
+  .badge{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 12px;font-size:.8rem;margin-top:8px}
+  .card{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+  .progress{display:flex;gap:6px;justify-content:center;margin-bottom:14px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--line)}
+  .dot.now{background:var(--accent)} .dot.ok{background:var(--ok)} .dot.ng{background:var(--ng)}
+  .qnum{color:var(--accent);font-weight:700;font-size:.9rem}
+  .qtext{font-size:1.05rem;font-weight:700;margin:6px 0 16px;white-space:pre-wrap}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{all:unset;display:block;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:.97rem;transition:background .15s}
+  .choice:active{background:var(--accent-soft)}
+  .choice.correct{border-color:var(--ok);background:var(--ok-soft)}
+  .choice.wrong{border-color:var(--ng);background:var(--ng-soft)}
+  .choice[disabled]{cursor:default}
+  .result{margin-top:16px;padding:14px;border-radius:12px;font-size:.95rem}
+  .result.ok{background:var(--ok-soft)} .result.ng{background:var(--ng-soft)}
+  .result .rh{display:block;font-weight:700;margin-bottom:4px}
+  .btn{all:unset;box-sizing:border-box;width:100%;display:block;text-align:center;margin-top:16px;padding:13px;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+  .score{text-align:center;font-size:2.2rem;font-weight:700;color:var(--accent);margin:6px 0}
+  .msg{text-align:center;color:var(--sub)}
+  h2{font-size:1rem;margin:28px 0 10px}
+  .hist{display:flex;flex-direction:column;gap:8px}
+  .hrow{all:unset;display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;font-size:.92rem}
+  .hrow .s{color:var(--sub)} .hrow .s.done{color:var(--ok);font-weight:700}
+  .review{margin-top:10px;font-size:.92rem}
+  .review .item{border-top:1px dashed var(--line);padding:10px 0}
+  .review .a{color:var(--ok);font-weight:700}
+  .review .mine{margin-top:6px} .review .ngtxt{color:var(--ng)}
+  .review .exp{margin-top:6px;color:#5a564e}
+  .kw{color:#2b2a27;font-weight:700;font-size:1.18em;margin:0 1px}
+  .ngbox,.okbox{margin-top:10px;border-radius:12px;padding:10px 14px;font-size:.95rem;font-weight:700}
+  .ngbox{background:#fbe3dd;border:2.5px solid #c0392b;color:#8e2a1c}
+  .okbox{background:var(--ok-soft);border:1.5px solid var(--ok);color:#2f5e3a}
+  .ngbox .tt{color:#c0392b;font-size:1.05rem}
+  .okbox .tt{color:var(--ok)}
+  .menu{margin-top:16px;background:var(--accent-soft);border-radius:14px;padding:12px 14px;font-size:.92rem;display:flex;flex-direction:column;gap:6px}
+  .mrow{all:unset;display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:10px;padding:9px 12px;cursor:pointer}
+  .menu .s{color:var(--sub);font-size:.82rem}
+  .mascot{display:flex;align-items:center;gap:10px;margin:-4px 0 14px}
+  .mascot .face{width:76px;height:76px;flex:none}
+  .mascot .face svg{width:100%;height:100%}
+  .bubble{position:relative;flex:1;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:8px 12px;font-size:.92rem;min-height:44px}
+  .bubble:before{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:var(--line);border-left:0}
+  .bubble:after{content:"";position:absolute;left:-6px;top:19px;border:7px solid transparent;border-right-color:#fff;border-left:0}
+  .bubble .nm{display:block;font-size:.72rem;color:#c0392b;font-weight:700}
+  .mascot.pop .face{animation:hop .45s ease}
+  @keyframes hop{0%{transform:translateY(0)}40%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+  .illus{width:84px;height:84px;margin:4px auto 10px;background:var(--accent-soft);border-radius:50%;padding:8px}
+  .illus svg{width:100%;height:100%}
+  .confetti{position:absolute;inset:0;pointer-events:none}
+  .confetti i{position:absolute;top:-12px;width:8px;height:12px;border-radius:2px;animation:fall 2.6s ease-in forwards}
+  @keyframes fall{to{top:110%;transform:rotate(540deg)}}
+  .medal{width:80px;height:80px;margin:4px auto 0}
+  .flowers{display:flex;justify-content:center;gap:8px;margin-top:6px}
+  .flowers .fl{width:36px;height:36px} .flowers .bone{width:80px;height:40px}
+  .newb{display:inline-block;margin-left:6px;background:#c0392b;color:#fff;border-radius:999px;padding:1px 10px;font-size:.75rem;vertical-align:1px}
+  .ov{position:fixed;inset:0;z-index:50;background:rgba(245,242,236,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;animation:ovin .25s ease;cursor:pointer}
+  .ov.out{animation:ovout .35s ease forwards}
+  @keyframes ovin{from{opacity:0}to{opacity:1}} @keyframes ovout{to{opacity:0}}
+  .ov .stage{position:relative;width:240px;height:200px;display:flex;align-items:flex-end;justify-content:center}
+  .ov .big{width:190px;height:230px}
+  .ov .big svg,.ov .sitluna svg{width:100%;height:100%;overflow:visible}
+  .ov .stage{height:250px;width:260px}
+  /* しっぽ：ふつう→ゆっくり、全問正解・7日連続→ぶんぶん */
+  .ov .tail{animation:wag .32s ease-in-out infinite alternate}
+  .ov .big.perfect .tail,.ov.weekly .tail{animation:wag .14s ease-in-out infinite alternate}
+  @keyframes wag{from{transform:rotate(-14deg)}to{transform:rotate(12deg)}}
+  /* 表情の切りかえ */
+  .ov .fb{opacity:0;animation:showface 0s linear .55s forwards}
+  .ov .fa{animation:hideface 0s linear .55s forwards}
+  .ov .big.perfect .fa{animation:none}
+  @keyframes showface{to{opacity:1}} @keyframes hideface{to{opacity:0}}
+  .ov.weekly .fb,.ov.weekly .fa{animation-delay:.7s}
+  /* 7日連続：野原でステーキ */
+  .ov.weekly{background:#f3f8f2}
+  .ov .meadow{position:absolute;inset:0;width:100%;height:100%}
+  .ov .wtext{position:absolute;top:14%;left:0;right:0;text-align:center;z-index:2}
+  .ov .feast{position:absolute;left:50%;bottom:9%;width:240px;height:330px;transform:translateX(-50%)}
+  .ov .sitluna{position:absolute;left:30px;bottom:70px;width:180px;height:232px;animation:pop .45s cubic-bezier(.3,1.5,.5,1) both}
+  .ov .steak{position:absolute;left:20px;bottom:0;width:200px;height:88px;animation:pop .5s cubic-bezier(.3,1.5,.5,1) .3s both}
+  .ov .steam path{animation:steam 1.1s ease-in-out infinite}
+  .ov .steam path:nth-child(2){animation-delay:.35s} .ov .steam path:nth-child(3){animation-delay:.7s}
+  @keyframes steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.6}100%{opacity:0;transform:translateY(-8px)}}
+  .ov .hearts{position:absolute;inset:0}
+  .ov .hearts .fl2{bottom:200px;color:#e98a8a}
+  /* 上の案内役：まばたき・耳ぴくっ */
+  .mascot .eyes{animation:blink2 4.5s infinite}
+  @keyframes blink2{0%,93%,97%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+  .mascot .earR{animation:twitch 6s infinite}
+  @keyframes twitch{0%,88%,94%,100%{transform:rotate(0)}90%{transform:rotate(-12deg)}92%{transform:rotate(6deg)}}
+  @keyframes jump{0%,100%{transform:translateY(0) scale(1,1)}20%{transform:translateY(0) scale(1.08,.92)}55%{transform:translateY(-34px) scale(.96,1.05)}}
+  @keyframes spinjump{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-50px) rotate(180deg)}100%{transform:translateY(0) rotate(360deg)}}
+  @keyframes grow{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+  .ov .fl2{position:absolute;bottom:20px;font-size:1.6rem;opacity:0;animation:floatup 1.6s ease-out forwards}
+  @keyframes floatup{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translateY(-170px) scale(1.2)}}
+  .ov .msg2{font-size:1.45rem;font-weight:700;color:var(--accent);margin-top:14px;animation:pop .5s cubic-bezier(.3,1.6,.5,1) .25s both}
+  .ov.perfect .msg2,.ov.weekly .msg2{color:#c0392b}
+  .ov .sub2{color:var(--sub);margin-top:4px;animation:pop .5s ease .45s both}
+  .ov .tap{position:absolute;bottom:28px;z-index:2;color:var(--sub);font-size:.75rem}
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  .ov .confetti{position:absolute;inset:0;pointer-events:none}
+  .ov .confetti i{position:absolute;top:-14px;width:9px;height:13px;border-radius:2px;animation-name:fall;animation-timing-function:ease-in;animation-fill-mode:forwards}
+  .nextbox{display:flex;align-items:center;gap:10px;margin-top:16px;background:#eef5fa;border:2px dashed #9cc7e8;border-radius:14px;padding:10px 12px;animation:pop .5s cubic-bezier(.3,1.5,.5,1) .3s both}
+  .nbface{width:58px;height:58px;flex:none} .nbface svg{width:100%;height:100%}
+  .nbtxt b{display:block;font-size:1.08rem;color:#3d6f91} .nbtxt span{font-size:.8rem;color:var(--sub)}
+  .btn.nbbtn{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;text-align:left;margin-top:12px;padding:12px 16px;border-radius:999px;
+    background:linear-gradient(135deg,#5aa0cf,#3f7fb0 55%,#356d9a);font-size:1.12rem;box-shadow:0 5px 0 #2c5a80,0 8px 18px rgba(63,127,176,.35);
+    animation:pulse 1.4s ease-in-out .8s infinite}
+  .btn.nbbtn:active{transform:translateY(4px);box-shadow:0 1px 0 #2c5a80}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+  .nbl{width:46px;height:46px;flex:none;background:#fff;border-radius:50%;padding:3px;box-shadow:0 0 0 3px rgba(255,255,255,.4)}
+  .nbl svg{width:100%;height:100%}
+  .nbt{flex:1;line-height:1.35} .nbt small{display:block;font-size:.75rem;font-weight:500;opacity:.9}
+  .nbarrow{font-size:1.2rem;animation:arrow .9s ease-in-out infinite}
+  @keyframes arrow{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+  .nbshine{position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:shine 2.4s ease-in-out 1s infinite}
+  @keyframes shine{0%{left:-60%}45%,100%{left:130%}}
+  .nbtap{text-align:center;font-size:.78rem;color:#4a7fa3;margin-top:8px;animation:pop .4s ease 1s both}
+  .ov.intro{background:#eef5fa}
+  .ov .ititle{font-size:1.5rem;font-weight:700;color:#3d6f91;margin-bottom:6px;animation:pop .45s cubic-bezier(.3,1.6,.5,1) both}
+  .ov.intro .big{width:150px;height:182px}
+  .ov .isub{text-align:center;color:#3d6f91;margin-top:8px;font-weight:700;animation:pop .45s ease .25s both}
+  .ov .isub small{font-weight:500;color:var(--sub)}
+  body.rvmode .card{background:#f4f9fc;border-color:#cfe0ea}
+  body.rvmode .qnum{color:#4a7fa3}
+  body.rvmode #level{background:#dcebf5;color:#3d6f91;font-weight:700}
+  .colbox{margin-top:18px;background:#fbf7ee;border:1.5px solid #e8dcc4;border-radius:14px;padding:12px 14px;font-size:.92rem;color:#4a463e}
+  .colhead{display:flex;align-items:center;gap:8px;font-size:.8rem;color:#a0794a;font-weight:700}
+  .colface{width:30px;height:30px;flex:none} .colface svg{width:100%;height:100%}
+  .coltitle{font-weight:700;font-size:1rem;margin:6px 0 4px;color:#3b3a36}
+  .colbox p{margin:0;line-height:1.85}
+  .colbox .kw{font-size:1.08em}
+  footer{text-align:center;color:var(--sub);font-size:.78rem;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🔐 まいにちセキュリティ5問</h1>
+    <div class="meta" id="meta"></div>
+    <div class="badge" id="level"></div>
+  </header>
+  <div class="mascot" id="mascot"><div class="face" id="lunaFace"></div><div class="bubble"><span class="nm">ルナ</span><span id="lunaSay"></span></div></div>
+  <main id="app"></main>
+  <div id="menu"></div>
+  <h2>これまでの問題</h2>
+  <div class="hist" id="hist"></div>
+  <footer>毎朝6時ごろ、新しい5問が届きます。<br>記録はこの端末の中にだけ保存されます。</footer>
+</div>
+
+<script>
+const DAYS = [
+{
+  day: 1, v: 2, date: "2026-11-02", level: "Lv.1 超入門", theme: "だまされない基本",
+  qs: [
+    { q: "「お荷物をお届けしましたが不在のため持ち帰りました。こちらから確認ください」というSMS（ショートメッセージ）が届きました。いちばん安全な対応は？",
+      c: ["リンクを押して再配達を申し込む", "リンクは押さず、宅配会社の公式アプリや伝票の番号で確認する", "返信して本物かどうか聞いてみる", "友だちに転送して意見を聞く"],
+      a: 1,
+      e: "宅配業者をよそおった**偽SMS**はとても多い手口です。リンク先は偽サイトで、個人情報やカード番号を盗まれたり、ウイルス入りのアプリを入れさせられたりします。**届いたリンクは使わず**、自分で**公式アプリやブックマークから確認**するのが鉄則です。",
+      img: "sms", colt: "偽SMSはなぜ本物そっくり？", col: "偽SMSは、宅配会社や銀行、携帯会社など、だれもが使う会社の名前をかたって送られてきます。たくさんの人に一斉に送れば、ちょうど荷物を待っている人が引っかかるからです。リンク先のサイトも、ロゴや色まで**本物そっくり**に作られています。SMSは送り主の名前を偽ることもでき、本物の会社からのメッセージと同じ画面に並ぶこともあります。「見た目で見分ける」より「**リンクは使わない**」と決めておくのがいちばん確実です。", ng: "SMSやメールに届いたリンクを押す", ok: "宅配会社の公式アプリや、伝票の番号で確認する" },
+    { q: "次のうち、いちばん破られにくいパスワードはどれ？",
+      c: ["kitsune-ame-tsukimi-28yama", "20080315（誕生日）", "password123", "sakura"],
+      a: 0,
+      e: "パスワードは「**長さ**」がいちばん効きます。誕生日や名前、よくある単語は、機械で一瞬で試されてしまいます。関係のない単語をいくつかつなげると、長くて覚えやすいパスワードになります。目安は**12文字以上**で、ゲームやSNSのアカウントも同じです。",
+      img: "key", colt: "長さが効くのはなぜ？", col: "パスワードを破る方法のひとつに、機械で組み合わせを片っぱしから試す「**総当たり**」があります。1文字増えるごとに組み合わせの数はかけ算で増えるので、長くするほど時間がかかり、現実的には破れなくなります。一方、誕生日や名前、よく使われる単語は、最初に試される「よくあるパスワード」に入っていることが多く、すぐに破られてしまいます。関係のない単語を3〜4個つなげると、**長くて覚えやすく、推測もされにくい**パスワードになります。", rep: "password", ng: "誕生日・名前・よくある単語をパスワードにする", ok: "関係のない単語をつなげて、12文字以上にする" },
+    { q: "オンラインゲームで仲良くなった人から「レアアイテムをプレゼントしたいから、ログインIDとパスワードを教えて」とメッセージが来ました。どうする？",
+      c: ["仲良しだから、IDとパスワードを教える", "IDもパスワードも教えず、やりとりをやめる。しつこければブロック・通報する", "パスワードを少しだけ変えて教える", "IDだけなら教えても大丈夫"],
+      a: 1,
+      e: "IDとパスワードを教えると、**アカウントを乗っ取られ**て、アイテムやお金を取られたり、あなたのふりをして友だちに詐欺のメッセージを送られたりします。友だちでも運営の人でも、**パスワードを聞いてくる人はいません**。困ったら、家族やゲームの運営に相談しましょう。",
+      img: "sns", colt: "アカウントは大切な「財産」", col: "ゲームやSNSのアカウントには、課金したアイテムや友だちとのつながり、写真や思い出がつまっています。だからこそ、それをねらう人がいます。乗っ取られると、アイテムを売られたり、あなたのふりをして友だちにだましのメッセージを送られたりすることもあります。「プレゼントする」「手伝ってあげる」など、**親切な言葉で近づいてくる**のがよくある手口です。パスワードは**だれにも教えない**、と決めておきましょう。", ng: "ゲームやSNSで知り合った人に、IDやパスワードを教える", ok: "やりとりをやめて、ブロックやゲームの運営に通報する" },
+    { q: "「警察です。あなたの口座が犯罪に使われています。LINEのビデオ通話で取り調べをします」と電話が来ました。画面には制服姿の人と逮捕状が映っています。どうする？",
+      c: ["本物の警察だと思うので、言われたとおりお金を振り込む", "身の潔白を証明するため、口座番号や暗証番号を伝える", "電話を切り、自分で調べた警察署の番号か「#9110」に相談する", "「家族には内緒に」と言われたので、ひとりで対応する"],
+      a: 2,
+      e: "これは「**ニセ警察詐欺**」です。警察庁によると、2026年1〜6月の被害額は約508億円で、前の年の同じ時期より約109億円増えています。警察庁は、**警察がビデオ通話で取り調べをしたり、サイトで逮捕状を見せたりすることはない**と注意を呼びかけています。2026年9月の民間の調査では、20代の約半数がこの手口を「知らない」と答えていて、若い人も他人ごとではありません。",
+      img: "phone", colt: "なぜ信じてしまうの？", col: "ニセ警察詐欺では、犯人が**本物の警察署と同じ番号に見せかけて**電話をかけてきたり、制服姿でビデオ通話に出てきたり、本物そっくりの逮捕状を見せたりします。「あなたが事件に関わっている」と言われると、だれでも不安になって冷静さを失います。さらに「秘密の捜査だから家族にも言わないで」と**口止め**して、相談させないようにするのも特徴です。少しでもおかしいと思ったら、いったん電話を切り、家族や#9110に相談しましょう。", news: true, ng: "警察を名乗る相手の指示で、お金を振り込む・口座の情報を伝える", ok: "すぐ電話を切り、#9110（警察相談専用電話）か家族に相談する" },
+    { q: "「二段階認証（2段階認証）」の説明として正しいのはどれ？",
+      c: ["パスワードを2回入力すること", "パスワードを2つ用意して交互に使うこと", "ログインを2回に1回にする設定", "パスワードに加えて、スマホに届く番号など“別の確認”も求める仕組み"],
+      a: 3,
+      e: "二段階認証は、パスワードが盗まれても、**スマホに届くコード**など「本人の手元にあるもの」がないとログインできない仕組みです。GmailやLINE、Instagram、ゲームのアカウント、ネット銀行など大事なサービスでは、ぜひ**オンに**しておきましょう。ただし、そのコードを**人に教えるのは絶対にNG**です。",
+      img: "twofa", colt: "二段階認証にもいろいろある", col: "二段階認証には、SMSで届く番号を入れる方法のほかに、「**認証アプリ**」に表示される番号を入れる方法や、スマホに届いた通知を「承認」する方法などがあります。どれも「パスワード＋本人の手元にあるもの」の組み合わせで、パスワードだけ盗まれてもログインを防げます。設定するときに表示される「**バックアップコード**」は、スマホをなくしたときに必要になるので、紙にメモして大切に保管しておきましょう。", rep: "twofa", ng: "届いた確認コードを人に教える（電話やDMで聞かれても）", ok: "LINE・Instagram・ゲームなど大事なアカウントは二段階認証をオンにする" }
+  ]
+},
+// __NEW_DAYS_HERE__
+];
+
+// ===== イラスト（ルナ・アイコン・ごほうび） =====
+function lunaInner(mood, extra, noCollar){
+  const sad = mood==="sad", kira = mood==="kira", happy = mood==="happy" || kira;
+  const earL = `<g class="earL" style="transform-origin:38px 44px"${sad?' transform="rotate(-16 38 44)"':''}><path d="M20 52 Q15 14 29 7 Q47 17 55 37 Z" fill="#c9844a"/><path d="M27 45 Q25 22 31.5 16 Q42 24 47.5 37 Z" fill="#f3c4a6"/></g>`;
+  const earR = `<g class="earR" style="transform-origin:82px 44px"${sad?' transform="rotate(16 82 44)"':''}><path d="M100 52 Q105 14 91 7 Q73 17 65 37 Z" fill="#c9844a"/><path d="M93 45 Q95 22 88.5 16 Q78 24 72.5 37 Z" fill="#f3c4a6"/></g>`;
+  const brows = sad
+    ? `<ellipse cx="42" cy="50" rx="5" ry="3" fill="#f7e3c4" transform="rotate(18 42 50)"/><ellipse cx="78" cy="50" rx="5" ry="3" fill="#f7e3c4" transform="rotate(-18 78 50)"/>`
+    : `<ellipse cx="42" cy="48" rx="5" ry="3.2" fill="#f7e3c4"/><ellipse cx="78" cy="48" rx="5" ry="3.2" fill="#f7e3c4"/>`;
+  const eye = (x) => `<ellipse cx="${x}" cy="62" rx="${sad?4.8:5.8}" ry="${sad?5.6:6.8}" fill="#2b1d14"/><circle cx="${x+2}" cy="59.3" r="2.3" fill="#fff"/><circle cx="${x-1.6}" cy="64.6" r="1" fill="#fff" opacity=".85"/>`;
+  const kiraEye = (x) => `<ellipse cx="${x}" cy="61" rx="7" ry="8.2" fill="#2b1d14"/><path d="M${x+2.2} ${54.6} l1.3 3 3 1.3 -3 1.3 -1.3 3 -1.3 -3 -3 -1.3 3 -1.3z" fill="#fff"/><circle cx="${x-2.4}" cy="64.6" r="1.6" fill="#fff"/><circle cx="${x+3}" cy="65.6" r=".9" fill="#fff" opacity=".8"/>`;
+  const eyes = kira ? `${kiraEye(43)}${kiraEye(77)}` : happy && mood!=="kira"
+    ? `<path d="M36 63 Q43 55 50 63" stroke="#2b1d14" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M70 63 Q77 55 84 63" stroke="#2b1d14" stroke-width="3.4" fill="none" stroke-linecap="round"/>`
+    : `<g class="eyes" style="transform-origin:60px 62px">${eye(43)}${eye(77)}</g>`;
+  const mouth = happy
+    ? `<path d="M50.5 82 Q60 99 69.5 82 Q65 85 60 81.5 Q55 85 50.5 82 Z" fill="#7a3428"/><path d="M54.5 89 Q60 96.5 65.5 89 Q60 87 54.5 89 Z" fill="#f08a8a"/>`
+    : sad
+    ? `<path d="M60 79 v2.5" stroke="#2b1d14" stroke-width="2.2" stroke-linecap="round"/><path d="M52 86 Q56 82.5 60 85 Q64 82.5 68 86" stroke="#2b1d14" stroke-width="2.2" fill="none" stroke-linecap="round"/>`
+    : `<path d="M60 79 v3 M51 82 Q55.5 87.5 60 82 Q64.5 87.5 69 82" stroke="#2b1d14" stroke-width="2.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const sweat = sad ? `<path d="M96 38 q5.5 8 0 11.5 q-5.5 -3.5 0 -11.5z" fill="#9cc7e8"/>` : "";
+  const drool = kira ? `<path d="M67 88 q2.5 6 0 9 q-2.5 -3 0 -9z" fill="#bfe3f5"/>` : "";
+  return `
+    ${earL}${earR}
+    ${noCollar ? "" : `<path d="M24 102 Q60 126 96 102 L96 109 Q60 133 24 109 Z" fill="#c0392b"/>
+    <circle cx="60" cy="119" r="4" fill="none" stroke="#c9c2b6" stroke-width="2.2"/>`}
+    <ellipse cx="60" cy="66" rx="42" ry="37" fill="#d9965a"/>
+    <ellipse cx="60" cy="36" rx="20" ry="8" fill="#c9844a" opacity=".14"/>
+    <path d="M22 78 Q27 101 60 104 Q93 101 98 78 Q88 66 73 70 Q60 76 47 70 Q32 66 22 78 Z" fill="#fbf1e2"/>
+    ${brows}${eyes}
+    <path d="M52.5 72 Q60 67.5 67.5 72 Q65.5 79.5 60 79.5 Q54.5 79.5 52.5 72 Z" fill="#2b211b"/>
+    <ellipse cx="57.3" cy="72.4" rx="2.4" ry="1.2" fill="#73625a"/>
+    ${mouth}
+    <ellipse cx="31" cy="77" rx="6.2" ry="3.6" fill="#f4a9a0" opacity=".55"/><ellipse cx="89" cy="77" rx="6.2" ry="3.6" fill="#f4a9a0" opacity=".55"/>
+    ${sweat}${drool}${extra||""}`;
+}
+function luna(mood, extra){ return `<svg viewBox="0 0 120 124" xmlns="http://www.w3.org/2000/svg" aria-label="ルナ">${lunaInner(mood, extra)}</svg>`; }
+const ICONS = {
+  sms: `<rect x="30" y="14" width="40" height="72" rx="8" fill="#5f7f74"/><rect x="34" y="22" width="32" height="54" rx="3" fill="#fff"/><path d="M40 34 h22 a4 4 0 0 1 4 4 v8 a4 4 0 0 1 -4 4 h-14 l-6 5 v-5 h-2 a4 4 0 0 1 -4 -4 v-8 a4 4 0 0 1 4 -4z" fill="#f2c94c"/><circle cx="72" cy="22" r="9" fill="#c0392b"/><text x="72" y="26" font-size="11" text-anchor="middle" fill="#fff" font-weight="700">!</text>`,
+  mail: `<rect x="16" y="28" width="68" height="46" rx="6" fill="#fff" stroke="#5f7f74" stroke-width="4"/><path d="M18 32 L50 56 L82 32" fill="none" stroke="#5f7f74" stroke-width="4" stroke-linejoin="round"/><circle cx="78" cy="28" r="10" fill="#c0392b"/><text x="78" y="33" font-size="13" text-anchor="middle" fill="#fff" font-weight="700">?</text>`,
+  key: `<circle cx="34" cy="50" r="16" fill="none" stroke="#d4a017" stroke-width="7"/><path d="M50 50 h34 M72 50 v12 M82 50 v9" stroke="#d4a017" stroke-width="7" stroke-linecap="round"/>`,
+  reuse: `<rect x="12" y="44" width="24" height="20" rx="3" fill="#5f7f74"/><path d="M17 44 v-6 a7 7 0 0 1 14 0 v6" fill="none" stroke="#5f7f74" stroke-width="4"/><rect x="38" y="44" width="24" height="20" rx="3" fill="#5f7f74"/><path d="M43 44 v-6 a7 7 0 0 1 14 0 v6" fill="none" stroke="#5f7f74" stroke-width="4"/><rect x="64" y="44" width="24" height="20" rx="3" fill="#5f7f74"/><path d="M69 44 v-6 a7 7 0 0 1 14 0 v6" fill="none" stroke="#5f7f74" stroke-width="4"/><path d="M14 78 h72" stroke="#c0392b" stroke-width="4" stroke-dasharray="6 5"/><circle cx="50" cy="80" r="7" fill="#d4a017"/>`,
+  alert: `<rect x="14" y="18" width="72" height="50" rx="5" fill="#fff" stroke="#5f7f74" stroke-width="4"/><path d="M50 28 L64 54 H36 Z" fill="#c0392b"/><text x="50" y="51" font-size="14" text-anchor="middle" fill="#fff" font-weight="700">!</text><path d="M40 76 h20 M50 68 v8" stroke="#5f7f74" stroke-width="4" stroke-linecap="round"/>`,
+  shield: `<path d="M50 12 L80 24 V48 C80 68 66 80 50 88 C34 80 20 68 20 48 V24 Z" fill="#5f7f74"/><path d="M37 50 l9 9 l18 -20" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`,
+  twofa: `<rect x="14" y="30" width="34" height="42" rx="4" fill="#fff" stroke="#5f7f74" stroke-width="4"/><text x="31" y="56" font-size="12" text-anchor="middle" fill="#5f7f74" font-weight="700">****</text><rect x="56" y="18" width="30" height="58" rx="6" fill="#5f7f74"/><rect x="60" y="26" width="22" height="40" rx="2" fill="#fff"/><text x="71" y="50" font-size="10" text-anchor="middle" fill="#3b3a36" font-weight="700">123</text><path d="M48 52 h6" stroke="#d4a017" stroke-width="4"/>`,
+  wifi: `<path d="M18 42 a46 46 0 0 1 64 0" fill="none" stroke="#5f7f74" stroke-width="6" stroke-linecap="round"/><path d="M29 54 a30 30 0 0 1 42 0" fill="none" stroke="#5f7f74" stroke-width="6" stroke-linecap="round"/><path d="M40 66 a14 14 0 0 1 20 0" fill="none" stroke="#5f7f74" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="76" r="5" fill="#5f7f74"/>`,
+  card: `<rect x="14" y="26" width="72" height="46" rx="6" fill="#5f7f74"/><rect x="14" y="36" width="72" height="9" fill="#3b4f48"/><rect x="22" y="54" width="16" height="10" rx="2" fill="#f2c94c"/><path d="M46 60 h30" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
+  update: `<path d="M74 40 a26 26 0 1 0 2 18" fill="none" stroke="#5f7f74" stroke-width="7" stroke-linecap="round"/><path d="M78 24 v18 h-18" fill="none" stroke="#5f7f74" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`,
+  sns: `<circle cx="36" cy="38" r="11" fill="#5f7f74"/><path d="M16 74 a20 20 0 0 1 40 0z" fill="#5f7f74"/><path d="M58 22 h26 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 h-16 l-7 6 v-6 h-3 a4 4 0 0 1 -4 -4 v-14 a4 4 0 0 1 4 -4z" fill="#f2c94c"/><circle cx="64" cy="33" r="2" fill="#3b3a36"/><circle cx="71" cy="33" r="2" fill="#3b3a36"/><circle cx="78" cy="33" r="2" fill="#3b3a36"/>`,
+  pc: `<rect x="20" y="22" width="60" height="40" rx="4" fill="#fff" stroke="#5f7f74" stroke-width="4"/><path d="M12 70 h76 l-6 8 h-64z" fill="#5f7f74"/><circle cx="50" cy="42" r="8" fill="#d4a017"/>`,
+  phone: `<path d="M30 18 l12 -2 l8 18 l-8 6 a40 40 0 0 0 18 18 l6 -8 l18 8 l-2 12 a10 10 0 0 1 -10 8 c-30 -2 -50 -22 -52 -52 a10 10 0 0 1 10 -8z" fill="#5f7f74"/><circle cx="76" cy="24" r="10" fill="#c0392b"/><text x="76" y="29" font-size="13" text-anchor="middle" fill="#fff" font-weight="700">!</text>`,
+  backup: `<path d="M28 64 a16 16 0 0 1 2 -32 a22 22 0 0 1 42 4 a14 14 0 0 1 0 28z" fill="#e6eee9" stroke="#5f7f74" stroke-width="4"/><path d="M50 74 v-26 M40 56 l10 -10 l10 10" fill="none" stroke="#5f7f74" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`
+};
+function guessIcon(q){
+  const t = q.q;
+  const rules = [["sms",/SMS|ショートメッセージ/],["twofa",/二段階|2段階|認証コード|確認コード/],["reuse",/使い回/],["key",/パスワード|パスキー/],["alert",/ウイルス|感染|警告/],["mail",/メール/],["wifi",/Wi-?Fi|ワイファイ/],["card",/カード|口座|振込|請求/],["update",/アップデート|更新/],["sns",/SNS|インスタ|LINE|フォロ/],["phone",/電話/],["backup",/バックアップ|クラウド/],["pc",/パソコン|USB/]];
+  for (const [k,re] of rules) if (re.test(t)) return k;
+  return "shield";
+}
+function illus(q){
+  const k = (q.img && ICONS[q.img]) ? q.img : guessIcon(q);
+  return `<div class="illus"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${ICONS[k]}</svg></div>`;
+}
+const HAT2 = `<g transform="rotate(-14 60 14)"><path d="M47 26 L60 -12 L73 26 Z" fill="#9cc7e8"/><path d="M50 17 L70 17 M53.5 7 L66.5 7" stroke="#fff" stroke-width="3.2"/><circle cx="60" cy="-12" r="5.5" fill="#f2c94c"/><path d="M46 26 Q60 31 74 26" stroke="#f2c94c" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
+const CROWN2 = `<path d="M42 30 L44 8 L52 19 L60 2 L68 19 L76 8 L78 30 Z" fill="#f2c94c" stroke="#d4a017" stroke-width="2.4" stroke-linejoin="round"/><circle cx="60" cy="16" r="3" fill="#e98a8a"/><circle cx="50" cy="24" r="2" fill="#9cc7e8"/><circle cx="70" cy="24" r="2" fill="#9cc7e8"/>`;
+function lunaSit(face1, face2, acc){
+  const C="#d9965a", D="#c9844a", W="#fbf1e2";
+  const paw = (cx) => `<ellipse cx="${cx}" cy="183" rx="11" ry="6.5" fill="${W}"/><path d="M${cx-3.5} 179 v3.5 M${cx+3.5} 179 v3.5" stroke="#e2cdb2" stroke-width="1.3" stroke-linecap="round"/>`;
+  const f2 = face2 ? `<g class="fb">${lunaInner(face2, acc, true)}</g>` : "";
+  return `<svg viewBox="0 -14 160 206" xmlns="http://www.w3.org/2000/svg" aria-label="ルナ">
+    <g class="tail" style="transform-origin:112px 160px">
+      <path d="M110 162 C138 164 150 136 136 124 C124 114 110 128 122 136" fill="none" stroke="${C}" stroke-width="14" stroke-linecap="round"/>
+      <path d="M126 130 C130 127 134 130 132 134" fill="none" stroke="${W}" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M138 128 C141 134 140 142 136 148" fill="none" stroke="#7a5236" stroke-width="4.5" stroke-linecap="round" opacity=".45"/>
+    </g>
+    <ellipse cx="46" cy="166" rx="20" ry="18" fill="${D}"/><ellipse cx="114" cy="166" rx="20" ry="18" fill="${D}"/>
+    <ellipse cx="36" cy="184" rx="12" ry="6" fill="${W}"/><ellipse cx="124" cy="184" rx="12" ry="6" fill="${W}"/>
+    <path d="M57 108 Q47 132 45 160 Q44 174 46 182 L114 182 Q116 174 115 160 Q113 132 103 108 Q80 100 57 108 Z" fill="${C}"/>
+    <path d="M60 84 Q58 100 54 116 Q80 128 106 116 Q102 100 100 84 Z" fill="${C}"/>
+    <path d="M59 110 Q80 102 101 110 Q103 136 80 150 Q57 136 59 110 Z" fill="${W}"/>
+    <ellipse cx="80" cy="106" rx="17" ry="12" fill="${W}"/>
+    <rect x="61" y="138" width="16" height="44" rx="8" fill="${C}"/><rect x="83" y="138" width="16" height="44" rx="8" fill="${C}"/>
+    <path d="M77 146 v34" stroke="${D}" stroke-width="1.4" opacity=".5"/><path d="M83 146 v34" stroke="${D}" stroke-width="1.4" opacity=".5"/>
+    ${paw(69)}${paw(91)}
+    <path d="M55 107 Q80 124 105 107" stroke="#c0392b" stroke-width="7.5" fill="none" stroke-linecap="round"/>
+    <path d="M57 105.5 Q80 121 103 105.5" stroke="#e05a48" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/>
+    <circle cx="80" cy="121.5" r="4.4" fill="none" stroke="#c9c2b6" stroke-width="2.3"/>
+    <g transform="translate(20,0)"><g class="fa">${lunaInner(face1, acc, true)}</g>${f2}</g>
+  </svg>`;
+}
+const STEAK = `<svg class="steak" viewBox="0 0 160 70" xmlns="http://www.w3.org/2000/svg">
+  <g class="steam"><path d="M58 22 q-6 -8 0 -14 q6 -6 0 -14" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".9"/><path d="M80 18 q-6 -8 0 -14 q6 -6 0 -14" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".9"/><path d="M102 22 q-6 -8 0 -14 q6 -6 0 -14" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".9"/></g>
+  <ellipse cx="80" cy="50" rx="72" ry="17" fill="#e8e2d6"/><ellipse cx="80" cy="47" rx="70" ry="16" fill="#fff"/><ellipse cx="80" cy="47" rx="56" ry="11" fill="none" stroke="#efe9de" stroke-width="2"/>
+  <path d="M38 44 C36 30 60 22 84 24 C110 26 126 32 122 44 C118 54 96 56 78 55 C56 54 40 52 38 44 Z" fill="#8b4a2b"/>
+  <path d="M44 42 C44 32 62 27 84 28 C106 29 118 34 116 42 C113 50 94 51 78 50 C60 50 46 48 44 42 Z" fill="#a85a34"/>
+  <path d="M56 34 l12 14 M72 30 l14 18 M90 30 l12 16 M106 33 l7 10" stroke="#6e3a20" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+  <path d="M118 36 c6 -4 12 -2 12 3 c0 4 -6 6 -12 4" fill="#f6efe0" stroke="#e2d6bf" stroke-width="1.5"/>
+  <circle cx="132" cy="40" r="4" fill="#f6efe0" stroke="#e2d6bf" stroke-width="1.5"/>
+  <ellipse cx="32" cy="46" rx="7" ry="4" fill="#7fb069"/><ellipse cx="27" cy="44" rx="5" ry="3" fill="#93c47d"/>
+</svg>`;
+const MEADOW = `<svg class="meadow" viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe8f5"/><stop offset="1" stop-color="#f3f8f2"/></linearGradient></defs>
+  <rect width="400" height="300" fill="url(#sky)"/>
+  <circle cx="330" cy="60" r="28" fill="#f7d774"/>
+  <ellipse cx="80" cy="70" rx="34" ry="12" fill="#fff" opacity=".9"/><ellipse cx="200" cy="45" rx="26" ry="9" fill="#fff" opacity=".8"/>
+  <ellipse cx="90" cy="250" rx="220" ry="90" fill="#a9d18e"/><ellipse cx="330" cy="260" rx="200" ry="80" fill="#93c47d"/>
+  <rect y="240" width="400" height="60" fill="#8cbf72"/>
+  ${Array.from({length:22},(_,i)=>{const x=10+i*18+(i%3)*4, y=228+(i%4)*15; const c=["#f4b5a4","#fff","#f2c94c","#e98a8a"][i%4]; return `<g><path d="M${x} ${y+8} v8" stroke="#5f8f4e" stroke-width="2"/><circle cx="${x}" cy="${y+6}" r="3.4" fill="${c}"/><circle cx="${x}" cy="${y+6}" r="1.3" fill="#f2c94c"/></g>`}).join("")}
+</svg>`;
+const HAT = `<g transform="rotate(-18 40 20)"><path d="M28 30 L40 -6 L52 30 Z" fill="#9cc7e8"/><path d="M31 22 L49 22 M34 13 L46 13" stroke="#fff" stroke-width="3"/><circle cx="40" cy="-6" r="5" fill="#f2c94c"/></g>`;
+const CROWN = `<path d="M40 26 L42 6 L52 18 L60 2 L68 18 L78 6 L80 26 Z" fill="#f2c94c" stroke="#d4a017" stroke-width="2.5" stroke-linejoin="round"/><circle cx="60" cy="16" r="3" fill="#e98a8a"/><circle cx="48" cy="20" r="2.4" fill="#9cc7e8"/><circle cx="72" cy="20" r="2.4" fill="#9cc7e8"/>`;
+function celebrate(kind, onDone){
+  const ov = document.createElement("div");
+  ov.className = "ov " + kind;
+  const colors=["#f2c94c","#e98a8a","#5f7f74","#9cc7e8","#d79a5c"];
+  let deco = "";
+  if (kind!=="normal"){
+    deco = `<div class="confetti">` + Array.from({length:kind==="weekly"?60:44},(_,i)=>`<i style="left:${Math.random()*100}%;background:${colors[i%5]};animation-delay:${(Math.random()*0.6).toFixed(2)}s;animation-duration:${(1.4+Math.random()*0.8).toFixed(2)}s"></i>`).join("") + `</div>`;
+  }
+  const floats = (kind==="weekly" ? ["♡","✨","♡","⭐","♡","✨"] : kind==="perfect" ? ["⭐","✨","🎉","✨","⭐","🐾"] : ["🐾","♡","🐾","♡"]).map((e,i,a)=>`<span class="fl2" style="left:${12+i*(76/(a.length-1))}%;animation-delay:${(i*0.12).toFixed(2)}s">${e}</span>`).join("");
+  const body = kind==="weekly" ? lunaSit("normal","kira",CROWN2) : kind==="perfect" ? lunaSit("happy",null,HAT2) : lunaSit("normal","happy","");
+  const text = kind==="weekly" ? ["7日がんばったね！","ごほうびのステーキだワン 🍖"]
+             : kind==="perfect" ? ["全問正解！すごいワン！","パーフェクトだね 🎉"]
+             : ["今日もおつかれさま！","ルナがほめてるワン 🐾"];
+  if (kind==="weekly"){
+    ov.innerHTML = `${MEADOW}${deco}<div class="wtext"><div class="msg2">${text[0]}</div><div class="sub2">${text[1]}</div></div><div class="feast"><div class="hearts">${floats}</div><div class="sitluna">${body}</div>${STEAK}</div><div class="tap">タップでとじる</div>`;
+  } else {
+    ov.innerHTML = `${deco}<div class="stage">${floats}<div class="big sitting ${kind}">${body}</div></div><div class="msg2">${text[0]}</div><div class="sub2">${text[1]}</div><div class="tap">タップでとじる</div>`;
+  }
+  document.body.appendChild(ov);
+  let closed = false;
+  const close = () => { if (closed) return; closed = true; ov.classList.add("out"); setTimeout(()=>{ ov.remove(); onDone && onDone(); }, 350); };
+  ov.onclick = close;
+  setTimeout(close, kind==="weekly" ? 2800 : kind==="perfect" ? 2300 : 2000);
+}
+function say(text, mood){
+  $("lunaFace").innerHTML = luna(mood||"normal");
+  $("lunaSay").textContent = text;
+  const m = $("mascot"); m.classList.remove("pop"); void m.offsetWidth; m.classList.add("pop");
+}
+const pick = a => a[Math.floor(Math.random()*a.length)];
+function reward(score, total){
+  if (score===total){
+    const colors=["#f2c94c","#e98a8a","#5f7f74","#9cc7e8","#d79a5c"];
+    const bits = Array.from({length:28},(_,i)=>`<i style="left:${Math.random()*100}%;background:${colors[i%5]};animation-delay:${(Math.random()*1.2).toFixed(2)}s;transform:rotate(${Math.random()*180}deg)"></i>`).join("");
+    return `<div class="confetti">${bits}</div><div class="medal"><svg viewBox="0 0 100 100"><path d="M36 8 L50 40 L64 8 Z" fill="#c0392b"/><circle cx="50" cy="60" r="28" fill="#f2c94c" stroke="#d4a017" stroke-width="5"/><path d="M50 44 l5 10 l11 1.5 l-8 7.5 l2 11 l-10 -5.5 l-10 5.5 l2 -11 l-8 -7.5 l11 -1.5z" fill="#fff"/></svg></div>`;
+  }
+  if (score>=3){
+    const f = c => `<svg viewBox="0 0 40 40" class="fl"><g fill="${c}">${[0,72,144,216,288].map(r=>`<ellipse cx="20" cy="10" rx="6" ry="9" transform="rotate(${r} 20 20)"/>`).join("")}</g><circle cx="20" cy="20" r="5" fill="#f2c94c"/></svg>`;
+    return `<div class="flowers">${f("#e98a8a")}${f("#9cc7e8")}${f("#f4b5a4")}</div>`;
+  }
+  return `<div class="flowers"><svg viewBox="0 0 80 40" class="bone"><path d="M16 14 a7 7 0 1 1 6 -8 a7 7 0 1 1 6 8 h24 a7 7 0 1 1 6 -8 a7 7 0 1 1 6 8 v12 a7 7 0 1 1 -6 8 a7 7 0 1 1 -6 -8 h-24 a7 7 0 1 1 -6 8 a7 7 0 1 1 -6 -8z" fill="#fbf3e6" stroke="#d79a5c" stroke-width="3"/></svg></div>`;
+}
+
+const KEY = "secquiz-results-v1";
+const RV_KEY = "secquiz-review-v1";
+function load(k, d){ try{ return JSON.parse(localStorage.getItem(k)) || d; }catch(e){ return d; } }
+function save(k, o){ try{ localStorage.setItem(k, JSON.stringify(o)); }catch(e){} }
+let results = load(KEY, {});
+let reviews = load(RV_KEY, {});
+const EVER_KEY = KEY + "-ever";
+let doneEver = load(EVER_KEY, {});   // { "今日の日付": { y:[...], w:[...] } }
+
+function todayJST(){ return new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10); }
+function addDays(ds, n){ const d = new Date(ds+"T00:00:00Z"); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+function fmt(ds){ const [y,m,d]=ds.split("-"); return `${+m}月${+d}日`; }
+function rich(t){ return String(t).replace(/\*\*(.+?)\*\*/g, "<b class=\"kw\">$1</b>"); }
+function column(q){
+  if (!q.col) return "";
+  return `<div class="colbox"><div class="colhead"><span class="colface">${luna("normal")}</span><span>📖 ルナのひとくちコラム</span></div><div class="coltitle">${q.colt||""}</div><p>${rich(q.col)}</p></div>`;
+}
+function tips(q){
+  let h = "";
+  if (q.ng) h += `<div class="ngbox"><div class="tt">🚫 しちゃダメ！</div>${q.ng}</div>`;
+  if (q.ok) h += `<div class="okbox"><div class="tt">✅ こうする</div>${q.ok}</div>`;
+  return h;
+}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+const TODAY = todayJST();
+const avail = DAYS.filter(d => d.date <= TODAY).sort((a,b)=>a.day-b.day);
+const list = avail.length ? avail : DAYS.slice(0,1);
+const todayDay = list.find(d => d.date === TODAY) || list[list.length-1];
+const yDay = list.find(d => d.date === addDays(TODAY,-1));
+const wDay = list.find(d => d.date === addDays(TODAY,-7));
+const $ = id => document.getElementById(id);
+function getRes(d){ const r = d && results[d.day]; return r && (r.v||1)===(d.v||1) ? r : null; }
+const rvToday = () => reviews[TODAY] || {};
+
+// 今日のメニュー（順番：今日 → 昨日 → 1週間前）
+function steps(){
+  const s = [{ key:"t", title:"今日の5問", day:todayDay, done: !!getRes(todayDay) }];
+  if (yDay) s.push({ key:"y", title:"昨日の問題を復習", day:yDay, done: !!rvToday().y });
+  if (wDay) s.push({ key:"w", title:"1週間前の問題を復習", day:wDay, done: !!rvToday().w });
+  return s;
+}
+function nextStep(afterKey){
+  const s = steps(); const i = s.findIndex(x=>x.key===afterKey);
+  return s.slice(i+1).find(x=>!x.done) || null;
+}
+
+let S = null;
+
+function startDay(day){
+  document.body.classList.remove("rvmode");
+  S = { mode:"day", key: day===todayDay ? "t" : null, day, qs: day.qs.map((q,i)=>({...q, label:`第${i+1}問`})), idx:0, picks:[] };
+  $("meta").textContent = `${day.day}日目（${fmt(day.date)}）・テーマ：${day.theme}`;
+  $("level").textContent = day.level;
+  const done = getRes(day);
+  if (done){ S.picks = done.picks; showSummary(); } else { showQ(); say(pick(["今日の5問、いっしょに見はろうワン！","あやしいもの、見やぶれるかな？","ゆっくりでいいワン。はじめよう！"])); }
+  renderMenu();
+  if (done) toLuna();
+}
+
+function startReview(key){
+  document.body.classList.add("rvmode");
+  const day = key==="y" ? yDay : wDay; if(!day) return;
+  const qs = day.qs.map((q,i)=>{
+    const order = shuffle(q.c.map((_,k)=>k));
+    return { q:q.q, c:order.map(k=>q.c[k]), a:order.indexOf(q.a), e:q.e, ng:q.ng, ok:q.ok, img:q.img, news:q.news, col:q.col, colt:q.colt, label:`第${i+1}問` };
+  });
+  S = { mode:"review", key, day, qs, idx:0, picks:[] };
+  $("meta").textContent = `${day.day}日目（${fmt(day.date)}）・テーマ：${day.theme}`;
+  $("level").textContent = key==="y" ? "🔁 昨日の復習" : "🔁 1週間前の復習";
+  showQ(); renderMenu();
+  say(key==="y" ? "昨日の問題だワン。おぼえてるかな？" : "1週間前の問題だワン。思い出せるかな？");
+}
+
+const RV_WORDS = {
+  y: { call:"さあ、昨日の復習するよー！", btn:"昨日の復習をはじめる", title:"🔁 昨日の復習タイム！", sub:"昨日の5問、おぼえてるかな？" },
+  w: { call:"つぎは1週間前の問題だワン！", btn:"1週間前の復習をはじめる", title:"🔁 1週間前の復習タイム！", sub:"ちゃんと思い出せるかな？" },
+  t: { call:"つぎは今日の5問だワン！", btn:"今日の5問をはじめる", title:"", sub:"" }
+};
+function remainText(nx){
+  const st = steps(); const left = st.filter(x=>!x.done).length;
+  return left<=1 ? "これが今日さいごのメニュー！" : `今日のメニュー あと${left}つ`;
+}
+function nextBox(nx){
+  const w = RV_WORDS[nx.key];
+  return `<div class="nextbox"><div class="nbface">${luna("happy")}</div><div class="nbtxt"><b>${w.call}</b><span>${fmt(nx.day.date)}の5問・テーマ：${nx.day.theme}</span></div></div>
+    <button class="btn nbbtn" id="goNext"><span class="nbshine"></span><span class="nbl">${luna("happy")}</span><span class="nbt">${w.btn}！<small>${remainText(nx)}</small></span><span class="nbarrow">▶</span></button>
+    <div class="nbtap">🐾 タップしてね 🐾</div>`;
+}
+function reviewIntro(key, go){
+  const w = RV_WORDS[key];
+  const ov = document.createElement("div");
+  ov.className = "ov intro";
+  ov.innerHTML = `<div class="ititle">${w.title}</div><div class="big sitting normal">${lunaSit("normal","happy","")}</div><div class="isub">${w.sub}<br><small>選択肢の順番は入れかわってるよ</small></div><div class="tap">タップですぐはじめる</div>`;
+  document.body.appendChild(ov);
+  let done = false;
+  const end = () => { if (done) return; done = true; go(); ov.classList.add("out"); setTimeout(()=>ov.remove(), 350); };
+  ov.onclick = end;
+  setTimeout(end, 1600);
+}
+let firstShow = true;
+function toLuna(){
+  const m = $("mascot"); if (!m) return;
+  const y = m.getBoundingClientRect().top + window.scrollY - 6;
+  window.scrollTo({top: Math.max(0,y), behavior: "auto"});
+}
+function startStep(st){ if (st.key==="t") startDay(todayDay); else startReview(st.key); }
+
+function dots(){
+  return `<div class="progress">${S.qs.map((q,i)=>{
+    let cls = "dot";
+    if (i < S.picks.length) cls += S.picks[i]===q.a ? " ok" : " ng";
+    else if (i === S.idx) cls += " now";
+    return `<span class="${cls}"></span>`;
+  }).join("")}</div>`;
+}
+
+function showQ(){
+  const q = S.qs[S.idx];
+  $("app").innerHTML = `<div class="card">${dots()}
+    ${illus(q)}<div class="qnum">${q.label} / ${S.qs.length}${q.news?` <span class="newb">🆕 最近の手口</span>`:""}</div>
+    <div class="qtext">${q.q}</div>
+    <div class="choices">${q.c.map((t,i)=>`<button class="choice" data-i="${i}">${t}</button>`).join("")}</div>
+    <div id="res"></div></div>`;
+  document.querySelectorAll(".choice").forEach(b => b.onclick = () => answer(+b.dataset.i));
+  if (firstShow) firstShow = false; else toLuna();
+}
+
+function answer(i){
+  const q = S.qs[S.idx];
+  S.picks.push(i);
+  document.querySelectorAll(".choice").forEach(b=>{
+    const n = +b.dataset.i; b.disabled = true;
+    if (n === q.a) b.classList.add("correct");
+    else if (n === i) b.classList.add("wrong");
+  });
+  const ok = i === q.a;
+  say(ok ? pick(["正解だワン！🐾","さすが！その調子！","バッチリ見やぶったね！"]) : pick(["おっと！ここは気をつけてほしいワン","だまされやすいところだワン。赤い箱をよく見てね"]), ok?"happy":"sad");
+  const last = S.idx === S.qs.length - 1;
+  $("res").innerHTML = `<div class="result ${ok?"ok":"ng"}"><span class="rh">${ok?"⭕ 正解！":"❌ ざんねん…"}</span>${rich(q.e)}</div>${tips(q)}
+    <button class="btn" id="next">${last?"結果を見る":"次の問題へ"}</button>${column(q)}`;
+  $("next").onclick = () => {
+    if (last){
+      if (S.mode==="day"){
+        const isNew = !getRes(S.day) && !(S.day.day in doneEver);
+        doneEver[S.day.day] = 1; save(EVER_KEY, doneEver);
+        results[S.day.day] = { picks:S.picks, date: TODAY, v: S.day.v||1 }; save(KEY, results);
+        renderHist(); showSummary(); toLuna();
+        const perfect = S.picks.every((x,i)=>x===S.qs[i].a);
+        const doneDays = DAYS.filter(d=>getRes(d)).length;
+        const weekly = isNew && doneDays>0 && doneDays % 7 === 0;
+        celebrate(perfect ? "perfect" : "normal", weekly ? () => celebrate("weekly") : null);
+      } else {
+        reviews[TODAY] = { ...rvToday(), [S.key]: S.picks }; save(RV_KEY, reviews);
+        renderHist(); showSummary(); toLuna();
+      }
+    } else { S.idx++; showQ(); }
+  };
+  $("res").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+function showSummary(){
+  const p = S.picks;
+  const score = p.filter((x,i)=>x===S.qs[i].a).length;
+  const total = S.qs.length;
+  const msg = score===total ? "満点！すばらしいです 🎉" : score>=3 ? "いい調子です。解説もおさらいしておきましょう。" : "ここで知れたのが一番の収穫です。おさらいしてみましょう。";
+  const title = S.mode==="review" ? `${S.key==="y"?"昨日":"1週間前"}の復習の結果` : `${S.day.day}日目の結果`;
+  const nx = S.key ? nextStep(S.key) : null;
+  $("app").innerHTML = `<div class="card">
+    <div class="msg">${title}</div>
+    ${reward(score,total)}
+    <div class="score">${score} / ${total}</div>
+    <div class="msg">${msg}</div>
+    ${nx ? nextBox(nx) : (S.key ? `<div class="msg" style="margin-top:12px">今日のメニューはこれでおしまいです。おつかれさまでした ☕</div>` : "")}
+    <div class="review">${S.qs.map((q,i)=>`<div class="item">
+      <div>${p[i]===q.a?"⭕":"❌"} <b>${q.label}</b>「${q.q}」</div>
+      ${p[i]===q.a ? "" : `<div class="mine ngtxt">あなたの選んだ回答：${q.c[p[i]]}</div>`}
+      <div class="a">答え：${q.c[q.a]}</div>
+      <div class="exp">${rich(q.e)}</div>${tips(q)}${column(q)}</div>`).join("")}</div>
+    <button class="btn ghost" id="retry">もう一度ちょうせんする</button>
+  </div>`;
+  if (nx) $("goNext").onclick = () => nx.key==="t" ? startStep(nx) : reviewIntro(nx.key, () => startStep(nx));
+  $("retry").onclick = () => {
+    if (S.mode==="day"){ const d=S.day; delete results[d.day]; save(KEY, results); renderHist(); startDay(d); }
+    else startReview(S.key);
+  };
+  say(score===total ? "満点だワン！えらい！🎉" : score>=3 ? "よくがんばったワン！" : "ドンマイ！ルナといっしょにおさらいしよう", score>=3?"happy":"normal");
+  renderMenu();
+}
+
+function renderMenu(){
+  const s = steps();
+  if (s.length < 2){ $("menu").innerHTML = ""; return; }
+  $("menu").innerHTML = `<div class="menu"><b>今日のメニュー</b>${s.map(x=>`
+    <button class="mrow" data-k="${x.key}"><span>${x.done?"✅":"⬜"} ${x.title}<span class="s">（${fmt(x.day.date)}）</span></span><span class="s">${x.done?"できた！":"未"}</span></button>`).join("")}</div>`;
+  document.querySelectorAll(".mrow").forEach(b => b.onclick = () => startStep(s.find(x=>x.key===b.dataset.k)));
+}
+
+function renderHist(){
+  $("hist").innerHTML = list.slice().reverse().map(d=>{
+    const r = getRes(d);
+    const s = r ? `${r.picks.filter((x,i)=>x===d.qs[i].a).length}/5` : "未回答";
+    return `<button class="hrow" data-d="${d.day}"><span>${d.day}日目　${fmt(d.date)}　${d.theme}</span><span class="s ${r?"done":""}">${s}</span></button>`;
+  }).join("");
+  document.querySelectorAll(".hrow").forEach(b => b.onclick = () => startDay(list.find(d=>d.day===+b.dataset.d)));
+}
+
+renderHist();
+startDay(todayDay);
+</script>
+</body>
+</html>
