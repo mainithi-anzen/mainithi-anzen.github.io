@@ -290,6 +290,21 @@
   @keyframes gobob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
   @keyframes garr{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
   @keyframes gshine{0%{left:-60%}55%,100%{left:130%}}
+
+  /* 結果画面：今日のおさらい */
+  .recap{margin-top:14px;background:#fffaf0;border:2px solid #ecd9b4;border-radius:16px;padding:12px 12px 10px}
+  .rctitle{font-weight:700;color:#8a5a2b;font-size:1.05rem;margin-bottom:8px}
+  .rctitle small{display:block;font-size:.75rem;color:var(--sub);font-weight:500}
+  .rcrow{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:8px 10px;margin-bottom:6px;animation:bubin .4s ease both}
+  .rcrow:nth-child(3){animation-delay:.08s}.rcrow:nth-child(4){animation-delay:.16s}.rcrow:nth-child(5){animation-delay:.24s}.rcrow:nth-child(6){animation-delay:.32s}
+  .rcic{flex:none;width:38px;height:38px;border-radius:50%;background:var(--accent-soft);padding:5px}
+  .rcic svg{width:100%;height:100%}
+  .rctx{font-size:.92rem;font-weight:700;line-height:1.5;color:#2f5e3a}
+  .rctx em{display:inline-block;font-style:normal;margin-left:6px;background:#fbe3dd;color:#c0392b;border-radius:999px;padding:0 8px;font-size:.7rem;vertical-align:1px}
+  .rcmotto{margin-top:8px;text-align:center;font-size:.85rem;color:#8a5a2b;background:#f6e8cf;border-radius:10px;padding:7px 8px}
+  .rcmotto b{color:#c0392b}
+  details.rvmore{margin-top:16px}
+  details.rvmore summary{display:block;text-align:center}
   footer{text-align:center;color:var(--sub);font-size:.78rem;margin-top:28px}
 </style>
 </head>
@@ -733,12 +748,17 @@ function showSummary(){
     ${reward(score,total)}
     <div class="score">${score} / ${total}</div>
     <div class="msg">${msg}</div>
+    <div class="recap"><div class="rctitle">📝 今日のおさらい<small>これだけ覚えておけばOK！</small></div>
+      ${S.qs.map((q,i)=>{ const k=(q.img&&ICONS[q.img])?q.img:guessIcon(q); return `<div class="rcrow"><span class="rcic"><svg viewBox="0 0 100 100">${ICONS[k]}</svg></span><span class="rctx">${q.ok||q.c[q.a]}${p[i]===q.a?"":`<em>要チェック</em>`}</span></div>`; }).join("")}
+      <div class="rcmotto">🐾 あやしいと思ったら、お金を払う前・入力する前に、<b>家族に相談</b></div></div>
     ${nx ? nextBox(nx) : (S.key ? `<div class="msg" style="margin-top:12px">今日のメニューはこれでおしまいです。おつかれさまでした ☕</div>` : "")}
+    <details class="more rvmore"><summary><span class="qh">📚 問題ごとにふりかえる ▼</span></summary>
     <div class="review">${S.qs.map((q,i)=>`<div class="item">
       <div>${p[i]===q.a?"⭕":"❌"} <b>${q.label}</b>「${q.q}」</div>${q.scene?`<div class="qmsg">${q.scene.t==="call"?"📞":q.scene.t==="popup"?"⚠️":"💬"} ${esc(q.scene.msg)}</div>`:""}
       ${p[i]===q.a ? "" : `<div class="mine ngtxt">あなたの選んだ回答：${q.c[p[i]]}</div>`}
       <div class="a">答え：${q.c[q.a]}</div>
       ${q.pts&&q.pts.length?`<ol class="pts">${q.pts.map((t,j)=>`<li><span class="pn">${j+1}</span><span>${rich(t)}</span></li>`).join("")}</ol>`:`<div class="exp">${rich(q.e)}</div>`}${tips(q)}${column(q)}</div>`).join("")}</div>
+    </details>
     <button class="btn ghost" id="retry">もう一度ちょうせんする</button>
   </div>`;
   if (nx) $("goNext").onclick = () => nx.key==="t" ? startStep(nx) : reviewIntro(nx.key, () => startStep(nx));
