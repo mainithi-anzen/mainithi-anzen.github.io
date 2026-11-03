@@ -247,7 +247,7 @@
   /* しちゃダメ！強調 */
   .ngbox{position:relative;padding-right:84px;border-width:3px;animation:puru .55s ease .55s both}
   .ngbox .tt{font-size:1.15rem;letter-spacing:.05em}
-  .hanko{position:absolute;right:10px;top:50%;width:66px;height:66px;margin-top:-33px;border:3.5px solid #d0312d;border-radius:50%;box-shadow:inset 0 0 0 2.5px #fbe3dd,inset 0 0 0 4.5px #d0312d;color:#d0312d;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;letter-spacing:-.04em;transform:rotate(-14deg);animation:hanko .45s cubic-bezier(.3,1.5,.5,1) .15s both;background:rgba(255,255,255,.35)}
+  .hanko{all:unset;box-sizing:border-box;cursor:pointer;position:absolute;right:10px;top:12px;width:66px;height:66px;border:3.5px solid #d0312d;border-radius:50%;box-shadow:inset 0 0 0 2.5px #fbe3dd,inset 0 0 0 4.5px #d0312d;color:#d0312d;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;letter-spacing:-.04em;transform:rotate(-14deg);animation:hanko .45s cubic-bezier(.3,1.5,.5,1) .15s both;background:rgba(255,255,255,.35)}
   @keyframes hanko{0%{opacity:0;transform:scale(2.6) rotate(-30deg)}70%{opacity:1;transform:scale(.92) rotate(-12deg)}100%{transform:rotate(-14deg)}}
   @keyframes puru{0%,100%{transform:none}20%{transform:translateX(-6px) rotate(-.6deg)}40%{transform:translateX(6px) rotate(.6deg)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
   /* 開きたくなる工夫 */
@@ -259,6 +259,25 @@
   details.more[open] summary{border-style:solid}
   details.colbox .tz{margin-top:4px;font-weight:500}
   details.colbox .tz em{color:#d79a5c}
+
+  .ngbox{min-height:108px}
+  .ngbox .hint{position:absolute;right:12px;top:80px;width:62px;text-align:center;font-size:.68rem;color:#c0392b;font-weight:700;animation:hintb 1.2s ease-in-out 1.2s infinite}
+  @keyframes hintb{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .ngbox .hanko{animation:hanko .45s cubic-bezier(.3,1.5,.5,1) .15s both,hpulse 1.6s ease-in-out 1.4s infinite}
+  @keyframes hpulse{0%,100%{transform:rotate(-14deg) scale(1)}50%{transform:rotate(-14deg) scale(1.08)}}
+  .ngbox .hanko:active{transform:rotate(-14deg) scale(.9)}
+  .ngwhy{display:none;margin:12px -70px 0 0;background:#fff;border-radius:10px;padding:10px 12px;font-weight:500;color:#4a463e;font-size:.92rem;line-height:1.8;animation:bubin .35s ease both}
+  .ngwhy .wq{font-weight:700;color:#c0392b;margin-bottom:2px}
+  .ngbox.why .ngwhy{display:block}
+  .ngbox.why .hint{visibility:hidden}
+  .ngbox.why .hanko{animation:none;transform:rotate(-14deg);opacity:.75}
+  /* コラム：太い縞々の枠 */
+  details.colbox{border:8px solid transparent;background:linear-gradient(#fbf7ee,#fbf7ee) padding-box,repeating-linear-gradient(-45deg,#d79a5c 0 9px,#f6e3c2 9px 18px) border-box}
+  details.colbox .tz em{display:inline-block;animation:tzb 1.3s ease-in-out infinite}
+  @keyframes tzb{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  details.colbox .open{animation:wig 2.2s ease-in-out 1s infinite}
+  @keyframes wig{0%,80%,100%{transform:rotate(0)}84%{transform:rotate(-8deg)}88%{transform:rotate(8deg)}92%{transform:rotate(-5deg)}96%{transform:rotate(3deg)}}
+  details.colbox[open] .open{animation:none}
   footer{text-align:center;color:var(--sub);font-size:.78rem;margin-top:28px}
 </style>
 </head>
@@ -431,7 +450,7 @@ function teaser(t){ const p = String(t).replace(/\*\*/g,"").split("。")[0]; ret
 function explain(q, ok){
   const head = `<div class="verdict ${ok?"ok":"ng"}"><span class="vface">${luna(ok?"happy":"sad")}</span><div><b>${ok?"⭕ 正解！":"❌ ざんねん…"}</b><span>${ok?"さすが！ポイントをおさらいだワン":"だいじょうぶ、ここで覚えればOKだワン"}</span></div></div>`;
   if (!q.pts || !q.pts.length) return head + `<div class="result ${ok?"ok":"ng"}" style="margin-top:8px">${rich(q.e)}</div>`;
-  return head + `<ol class="pts">${q.pts.map((t,i)=>`<li><span class="pn">${i+1}</span><span>${rich(t)}</span></li>`).join("")}</ol>` + (q.e?`<details class="more"><summary><span class="qh">🤔 どうしてそうなるの？</span><span class="tz">${teaser(q.e)} <em>つづきを読む ▼</em></span></summary><div>${rich(q.e)}</div></details>`:"");
+  return head + `<ol class="pts">${q.pts.map((t,i)=>`<li><span class="pn">${i+1}</span><span>${rich(t)}</span></li>`).join("")}</ol>` + "";
 }
 const PAW = `<svg viewBox="0 0 40 40"><g fill="#d2533e" opacity=".88"><ellipse cx="20" cy="26" rx="9.5" ry="8"/><ellipse cx="9.5" cy="15.5" rx="3.8" ry="4.8"/><ellipse cx="16.5" cy="9.5" rx="3.8" ry="5"/><ellipse cx="23.5" cy="9.5" rx="3.8" ry="5"/><ellipse cx="30.5" cy="15.5" rx="3.8" ry="4.8"/></g></svg>`;
 const HAT2 = `<g transform="rotate(-14 60 14)"><path d="M47 26 L60 -12 L73 26 Z" fill="#9cc7e8"/><path d="M50 17 L70 17 M53.5 7 L66.5 7" stroke="#fff" stroke-width="3.2"/><circle cx="60" cy="-12" r="5.5" fill="#f2c94c"/><path d="M46 26 Q60 31 74 26" stroke="#f2c94c" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
@@ -546,7 +565,7 @@ function column(q){
 }
 function tips(q){
   let h = "";
-  if (q.ng) h += `<div class="ngbox"><div class="tt">🚫 しちゃダメ！</div>${q.ng}<span class="hanko">ダメ！</span></div>`;
+  if (q.ng) h += `<div class="ngbox"><div class="tt">🚫 しちゃダメ！</div>${q.ng}${q.e?`<button class="hanko" type="button" onclick="this.parentNode.classList.toggle('why')" aria-label="どうしてダメなのか読む">ダメ！</button><span class="hint">おしてね👆</span><div class="ngwhy"><div class="wq">🤔 どうしてダメなの？</div>${rich(q.e)}</div>`:`<span class="hanko">ダメ！</span>`}</div>`;
   if (q.ok) h += `<div class="okbox"><div class="tt">✅ こうする</div>${q.ok}</div>`;
   return h;
 }
