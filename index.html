@@ -876,6 +876,19 @@ function renderHist(){
 }
 renderHist();
 startDay(todayDay);
+
+// 日付が変わったら、最新のページを読み直す（ホーム画面のアプリが昨日の画面のまま眠っているとき用）
+function freshReload(){ try{ location.replace(location.pathname + "?d=" + todayJST()); }catch(e){ location.reload(); } }
+function checkNewDay(){ if (todayJST() !== TODAY) freshReload(); }
+document.addEventListener("visibilitychange", () => { if (!document.hidden) checkNewDay(); });
+window.addEventListener("pageshow", checkNewDay);
+window.addEventListener("focus", checkNewDay);
+// 古いページが残っていて今日の問題がないときは、1回だけ最新を取りにいく
+(function(){
+  const newest = DAYS.reduce((m,d)=> d.date>m ? d.date : m, "");
+  let q = ""; try{ q = new URLSearchParams(location.search).get("d") || ""; }catch(e){}
+  if (newest < TODAY && q !== TODAY) freshReload();
+})();
 </script>
 </body>
 </html>
