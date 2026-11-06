@@ -869,7 +869,7 @@ function showSummary(){
       <div class="a">答え：${q.c[q.a]}</div>
       ${tips(q)}${column(q)}</div>`).join("")}</div>
     </details>
-    <button class="btn ghost" id="retry">もう一度ちょうせんする</button>
+    <button class="btn ghost" id="retry">もう一度挑戦する</button>
   </div>`;
   if (nx) $("goNext").onclick = () => nx.key==="t" ? startStep(nx) : reviewIntro(nx.key, () => startStep(nx));
   $("retry").onclick = () => {
