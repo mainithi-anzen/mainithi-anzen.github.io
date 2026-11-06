@@ -229,6 +229,8 @@
   /* ===== コラム（タップで開く） ===== */
   details.colbox summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer}
   details.colbox summary::-webkit-details-marker{display:none}
+  /* 結果画面の「ふりかえる」の中でも、コラムの見出しを小さいまま保つ */
+  details.more details.colbox > summary{display:flex;text-align:left;background:transparent;border:0;border-radius:0;padding:0;margin:0;color:inherit;font-weight:inherit}
   details.colbox .colface{width:42px;height:42px}
   details.colbox .cst{flex:1;min-width:0}
   details.colbox .cst small{display:block;font-size:.72rem;color:#a0794a;font-weight:700}
