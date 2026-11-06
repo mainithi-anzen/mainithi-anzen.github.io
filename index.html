@@ -810,7 +810,8 @@ function answer(i){
       }
     } else { S.idx++; showQ(); }
   };
-  $("res").scrollIntoView({behavior:"smooth", block:"nearest"});
+  // 答えたあとは画面を動かさない（選んだ答えと「なぜ違うの？」をそのまま読めるように）。選んだ答えが画面の外のときだけ、見える位置まで少し動かす
+  const picked = document.querySelector(`.choice[data-i="${i}"]`); if (picked) picked.scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
 function okText(q){ return String(q.ok||q.c[q.a]).replace(/^\s*今日5分[：:で、,]\s*/, ""); }
