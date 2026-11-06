@@ -55,7 +55,14 @@
   .hrow{all:unset;display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;font-size:.92rem}
   .hrow .s{color:var(--sub)} .hrow .s.done{color:var(--ok);font-weight:700}
   .review{margin-top:10px;font-size:.92rem}
-  .review .item{border-top:1px dashed var(--line);padding:10px 0}
+  .review .item{background:#fff;border:2px solid var(--line);border-radius:18px;padding:0 14px 14px;margin-top:22px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .review .item:first-child{margin-top:8px}
+  .review .ihead{display:flex;align-items:center;justify-content:space-between;margin:0 -14px 10px;padding:9px 14px;font-weight:700;font-size:1rem}
+  .review .iok .ihead{background:var(--ok-soft);color:var(--ok)} .review .ing .ihead{background:var(--ng-soft);color:var(--ng)}
+  .review .iok{border-color:#b9d3bf} .review .ing{border-color:#e4b9b0}
+  .review .inum{font-size:1.05rem;letter-spacing:.03em}
+  .review .ires{font-size:.85rem;background:#fff;border-radius:999px;padding:2px 10px}
+  .review .iq{font-weight:700;color:var(--ink);line-height:1.6}
   .review .a{color:var(--ok);font-weight:700}
   .review .mine{margin-top:6px} .review .ngtxt{color:var(--ng)}
   .review .exp{margin-top:6px;color:#5a564e}
@@ -865,8 +872,9 @@ function showSummary(){
     ${recapBox(p)}
     ${nx ? nextBox(nx) : (S.key ? `<div class="msg" style="margin-top:12px">今日のメニューはこれでおしまいです。おつかれさまでした ☕</div>` : "")}
     <details class="more rvmore"><summary><span class="qh">📚 問題ごとにふりかえる ▼</span></summary>
-    <div class="review">${S.qs.map((q,i)=>`<div class="item">
-      <div>${p[i]===q.a?"⭕":"❌"} <b>${q.label}</b>「${q.q}」</div>${q.scene?`<div class="qmsg">${q.scene.t==="call"?"📞":q.scene.t==="popup"?"⚠️":"💬"} ${esc(q.scene.msg)}</div>`:""}
+    <div class="review">${S.qs.map((q,i)=>`<div class="item ${p[i]===q.a?"iok":"ing"}">
+      <div class="ihead"><span class="inum">${q.label}</span><span class="ires">${p[i]===q.a?"⭕ 正解":"❌ まちがい"}</span></div>
+      <div class="iq">${q.q}</div>${q.scene?`<div class="qmsg">${q.scene.t==="call"?"📞":q.scene.t==="popup"?"⚠️":"💬"} ${esc(q.scene.msg)}</div>`:""}
       ${p[i]===q.a ? "" : `<div class="mine ngtxt">あなたの選んだ回答：${q.c[p[i]]}</div>${q.w&&q.w[p[i]]?`<div class="whysm">🤔 ${rich(q.w[p[i]])}</div>`:""}`}
       <div class="a">答え：${q.c[q.a]}</div>
       ${tips(q)}${column(q)}</div>`).join("")}</div>
