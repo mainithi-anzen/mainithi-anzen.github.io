@@ -791,7 +791,7 @@ function answer(i){
   const ok = i === q.a;
   // 答えのときは上の吹き出しを変えない（画面の外で見えないため）
   const last = S.idx === S.qs.length - 1;
-  $("res").innerHTML = `${explain(q, ok, i)}${tips(q, true)}
+  $("res").innerHTML = `${tips(q, true)}
     <button class="btn gonext" id="next"><span class="gshine"></span><span class="gtx">${last?"🎉 結果を見る":"次の問題へ"}</span><span class="garrow">▶</span></button>${column(q)}`;
   $("next").onclick = () => {
     if (last){
