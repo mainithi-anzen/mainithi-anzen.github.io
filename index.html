@@ -33,6 +33,7 @@
   .choice.correct{border-color:var(--ok);background:var(--ok-soft)}
   .choice.wrong{border-color:var(--ng);background:var(--ng-soft)}
   .choice .cmark{margin-right:6px}
+  .retry{margin-top:14px;text-align:center;font-weight:700;color:var(--accent);font-size:.98rem;animation:bubin .4s ease both}
   .choice .cwhy{margin-top:9px;padding-top:8px;border-top:1px dashed #d9a79c;font-size:.9rem;line-height:1.65;color:#5a3a33}
   .choice .cwhy .cwh{display:block;font-weight:700;color:#a0522d;margin-bottom:2px}
   .vbox{margin-top:16px;border-radius:16px;padding:4px 10px 10px;background:var(--accent-soft)}
@@ -781,14 +782,20 @@ function showQ(){
 
 function answer(i){
   const q = S.qs[S.idx];
-  S.picks.push(i);
-  document.querySelectorAll(".choice").forEach(b=>{
-    const n = +b.dataset.i; b.disabled = true;
-    if (n === q.a){ b.classList.add("correct"); b.insertAdjacentHTML("afterbegin", `<span class="cmark">⭕</span>`); }
-    else if (n === i){ b.classList.add("wrong"); b.insertAdjacentHTML("afterbegin", `<span class="cmark">❌</span>`);
-      if (q.w && q.w[i]) b.insertAdjacentHTML("beforeend", `<div class="cwhy"><span class="cwh">🤔 なぜ違うの？</span>${rich(q.w[i])}</div>`); }
-  });
-  const ok = i === q.a;
+  // 点数は「1回目に選んだ答え」で数える。まちがえたら、正解するまで何度でも選び直せる
+  if (S.picks.length === S.idx) S.picks.push(i);
+  const btn = document.querySelector(`.choice[data-i="${i}"]`);
+  if (i !== q.a){
+    btn.disabled = true; btn.classList.add("wrong");
+    btn.insertAdjacentHTML("afterbegin", `<span class="cmark">❌</span>`);
+    if (q.w && q.w[i]) btn.insertAdjacentHTML("beforeend", `<div class="cwhy"><span class="cwh">🤔 なぜ違うの？</span>${rich(q.w[i])}</div>`);
+    $("res").innerHTML = `<div class="retry">🐾 ほかの答えも選んでみよう！</div>`;
+    btn.scrollIntoView({behavior:"smooth", block:"nearest"});
+    return;
+  }
+  document.querySelectorAll(".choice").forEach(b=>{ b.disabled = true; });
+  btn.classList.add("correct"); btn.insertAdjacentHTML("afterbegin", `<span class="cmark">⭕</span>`);
+  const ok = S.picks[S.idx] === q.a;
   // 答えのときは上の吹き出しを変えない（画面の外で見えないため）
   const last = S.idx === S.qs.length - 1;
   $("res").innerHTML = `${tips(q, true)}
@@ -860,7 +867,7 @@ function showSummary(){
       <div>${p[i]===q.a?"⭕":"❌"} <b>${q.label}</b>「${q.q}」</div>${q.scene?`<div class="qmsg">${q.scene.t==="call"?"📞":q.scene.t==="popup"?"⚠️":"💬"} ${esc(q.scene.msg)}</div>`:""}
       ${p[i]===q.a ? "" : `<div class="mine ngtxt">あなたの選んだ回答：${q.c[p[i]]}</div>${q.w&&q.w[p[i]]?`<div class="whysm">🤔 ${rich(q.w[p[i]])}</div>`:""}`}
       <div class="a">答え：${q.c[q.a]}</div>
-      ${q.pts&&q.pts.length?`<ol class="pts">${q.pts.map((t,j)=>`<li><span class="pn">${j+1}</span><span>${rich(t)}</span></li>`).join("")}</ol>`:`<div class="exp">${rich(q.e)}</div>`}${tips(q)}${column(q)}</div>`).join("")}</div>
+      ${tips(q)}${column(q)}</div>`).join("")}</div>
     </details>
     <button class="btn ghost" id="retry">もう一度ちょうせんする</button>
   </div>`;
