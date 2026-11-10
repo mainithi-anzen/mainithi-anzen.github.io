@@ -33,6 +33,18 @@
   .choice.correct{border-color:var(--ok);background:var(--ok-soft)}
   .choice.wrong{border-color:var(--ng);background:var(--ng-soft)}
   .choice .cmark{margin-right:6px}
+  .gw{border-bottom:2px dotted #c58a4a;cursor:pointer;white-space:nowrap}
+  .gw sup{display:inline-block;margin-left:2px;width:15px;height:15px;line-height:15px;border-radius:50%;background:#e9b26e;color:#fff;font-size:10px;font-weight:700;text-align:center;vertical-align:4px}
+  .gtip{display:block;margin:6px 0 4px;background:#fff6e5;border:1.5px solid #ecc88e;border-radius:10px;padding:6px 10px;font-size:.86rem;font-weight:500;color:#5a4a33;line-height:1.6;animation:bubin .3s ease both}
+  .gp{font-size:.82em;font-weight:500;color:#8a6d4a}
+  details.gbox{margin-top:12px;background:#fff6e5;border:1.5px solid #ecc88e;border-radius:12px;padding:8px 12px;font-size:.9rem}
+  details.gbox summary{cursor:pointer;font-weight:700;color:#a0662a;list-style:none}
+  details.gbox summary::-webkit-details-marker{display:none}
+  details.gbox summary::after{content:" ▼";font-size:.8em}
+  details.gbox[open] summary::after{content:" ▲"}
+  details.gbox dl{margin:8px 0 2px}
+  details.gbox dt{font-weight:700;color:#3b3a36;margin-top:6px}
+  details.gbox dd{margin:2px 0 0;color:#5a4a33;line-height:1.6}
   .retry{margin-top:14px;text-align:center;font-weight:700;color:var(--accent);font-size:.98rem;animation:bubin .4s ease both}
   .choice .cwhy{margin-top:9px;padding-top:8px;border-top:1px dashed #d9a79c;font-size:.9rem;line-height:1.65;color:#5a3a33}
   .choice .cwhy .cwh{display:block;font-weight:700;color:#a0522d;margin-bottom:2px}
@@ -565,6 +577,124 @@ function scene(q){
   return `<div class="scene sc-${t==="dm"?"chat":t}"><div class="notch"></div><div class="scr">${inner}</div></div>`;
 }
 function teaser(t){ const p = String(t).replace(/\*\*/g,"").split("。")[0]; return esc(p.length>42 ? p.slice(0,40) : p) + "…"; }
+
+// ===== むずかしい言葉の辞書 =====
+// 問題文・選択肢・しちゃダメ・こうする → 言葉に点線と「?」を付け、タップで意味を出す
+// 解説・コラム・なぜ違うの？ → 言葉のあとに（意味）を小さく書きそえる
+// 新しい言葉はこの中に「"言葉": "やさしい意味",」の形で足す（長い言葉が優先される）
+const GLOSS = {
+  "2段階認証プロセス": "パスワードのほかに、スマホに届くコードなどでもう一回確かめるしくみ",
+  "2段階認証": "パスワードのほかに、スマホに届くコードなどでもう一回確かめるしくみ",
+  "二段階認証": "パスワードのほかに、スマホに届くコードなどでもう一回確かめるしくみ",
+  "2ファクタ認証": "パスワードのほかに、自分のiPhoneでも「許可」や数字で確かめるしくみ",
+  "パスキー": "パスワードのかわりに、顔や指紋でログインするしくみ",
+  "暗号化": "ほかの人には読めない形に変えること",
+  "FileVault": "Macの中のデータを、パスワードがないと読めないようにする機能",
+  "復旧キー": "パスワードを忘れたときに使う、予備のかぎ",
+  "ディスク": "パソコンの中で、データをしまっておく場所",
+  "権限": "アプリに「ここまで使っていいよ」と許すこと",
+  "名目": "お金を払わせるための理由や名前",
+  "データコントロール": "ChatGPTの、会話データの扱いを決める設定の場所",
+  "モデルを改善": "AIをかしこくするために、みんなの会話を使うこと",
+  "モデル改善": "AIをかしこくするために、みんなの会話を使うこと",
+  "フィードバック": "AIの答えに「よい・わるい」などの感想を送ること",
+  "フィッシング": "本物そっくりの偽メールや偽サイトで、情報を盗む詐欺",
+  "乗っ取り": "ほかの人に、自分のアカウントを勝手に使われること",
+  "乗っ取られ": "ほかの人に、自分のアカウントを勝手に使われること",
+  "消費者ホットライン": "お金や契約のトラブルを相談できる国の窓口。電話は188",
+  "#9110": "警察の相談窓口。事件かどうかわからないときに相談できる",
+  "サブスク": "毎月（毎年）お金を払って使うサービス",
+  "請求元": "お金を請求してきた会社やお店",
+  "運営": "そのアプリやゲームを動かしている会社",
+  "補償": "損をしたときに、お金などでうめ合わせること",
+  "招待リンク": "グループに入るためのリンク",
+  "確認コード": "ログインのときにスマホに届く、数字の合い言葉",
+  "ブックマーク": "よく見るサイトを登録しておき、すぐ開ける機能",
+  "コード決済": "スマホに出したQRコードなどで払うしくみ",
+  "キャッシュレス決済": "現金を使わずに、カードやスマホで払うこと",
+  "失効": "期限が切れて、使えなくなること",
+  "タスク詐欺": "「簡単な作業で稼げる」と誘い、先にお金を払わせる詐欺",
+  "マルチ商法": "人を誘うほどもうかると言って、商品や契約を広げさせる商売",
+  "闇バイト": "高いお金で誘って、犯罪の手伝いをさせるアルバイト",
+  "サインイン": "IDやパスワードを入れて、アカウントに入ること",
+  "Apple Account": "iPhoneやiCloudで使う、Appleのアカウント（前の名前はApple ID）",
+  "個人情報安全性チェック": "iPhoneで、だれと何を共有しているかをまとめて見直せる機能",
+  "緊急リセット": "家族もふくめ、全員との共有をいっぺんに止める機能",
+  "Watchtower": "1Passwordの、弱いパスワードや使い回しを教えてくれる機能",
+  "パスワードリスト攻撃": "どこかで漏れたパスワードを、ほかのサービスで試して入りこむ攻撃",
+  "スクリーンタイム": "スマホを使う時間や、使えるアプリを決められる機能",
+  "承認と購入のリクエスト": "子どもがアプリを買う前に、親の許可がいるようにする設定",
+  "公衆Wi-Fi": "お店や駅などで、だれでも使えるWi-Fi",
+  "遠隔操作": "離れた場所から、パソコンやスマホを勝手に動かすこと",
+  "サポート詐欺": "偽の警告画面で電話をかけさせ、お金をだまし取る詐欺",
+  "ニセ警察詐欺": "警察を名乗って、お金をだまし取る詐欺",
+  "脆弱性": "セキュリティの弱点",
+  "ランサムウェア": "データを使えなくして「元に戻したければお金を払え」と言うウイルス",
+  "ディープフェイク": "AIで作った、本物そっくりのにせの顔や声の動画",
+  "ログイン情報": "アカウントに入るためのIDとパスワード",
+  "メモリ": "ChatGPTが、前の会話の内容を覚えて次に生かす機能",
+  // __GLOSS_END__
+};
+const GKEYS = Object.keys(GLOSS).sort((a,b)=>b.length-a.length);
+const GRE = new RegExp(GKEYS.map(k=>k.replace(/[.*+?^${}()|[\]\\#]/g,"\\$&")).join("|"), "g");
+function glossParen(html){
+  // 「」の中の言葉は、」のあとに（意味）を書く（画面のボタン名などを切らないため）
+  const used = new Set(), parts = String(html).split(/(<[^>]+>)/);
+  const RE = new RegExp(GRE.source + "|[「」]", "g");
+  let out = "", depth = 0, pend = [];
+  const note = m => `<span class="gp">（${GLOSS[m]}）</span>`;
+  for (let k=0; k<parts.length; k++){
+    const pt = parts[k];
+    if (k % 2 === 1){ out += pt; continue; }
+    let i = 0, m; RE.lastIndex = 0;
+    while ((m = RE.exec(pt))){
+      out += pt.slice(i, m.index); const t = m[0]; i = m.index + t.length; out += t;
+      if (t === "「"){ depth++; continue; }
+      if (t === "」"){ depth = Math.max(0, depth-1); if (!depth && pend.length){ out += pend.map(note).join(""); pend = []; } continue; }
+      if (used.has(t)) continue; used.add(t);
+      const rest = (pt.slice(i) + parts.slice(k+1).join("")).replace(/^(\s*<[^>]+>)*/, "");
+      if (/^[（(]/.test(rest)) continue;
+      if (depth > 0) pend.push(t); else out += note(t);
+    }
+    out += pt.slice(i);
+  }
+  if (pend.length) out += pend.map(note).join("");
+  return out;
+}
+function gloss(html, mode){
+  if (html==null || html==="") return html==null ? "" : html;
+  if (mode === "paren") return glossParen(html);
+  const used = new Set(), parts = String(html).split(/(<[^>]+>)/);
+  let out = "";
+  for (let k=0; k<parts.length; k++){
+    const pt = parts[k];
+    if (k % 2 === 1){ out += pt; continue; }
+    out += pt.replace(GRE, (m, off) => {
+      if (used.has(m)) return m;
+      used.add(m);
+      if (mode === "paren"){
+        const rest = (pt.slice(off + m.length) + parts.slice(k+1).join("")).replace(/^(\s*<[^>]+>)*/, "");
+        if (/^[（(]/.test(rest)) return m;
+        return m + `<span class="gp">（${GLOSS[m]}）</span>`;
+      }
+      return `<span class="gw" data-g="${m}" onclick="gtap(event,this)">${m}<sup>?</sup></span>`;
+    });
+  }
+  return out;
+}
+// 問題文と選択肢の言葉は、どの選択肢に付いているかで答えがわからないよう、選択肢の下にまとめて出す
+function glossList(texts){
+  const found = [];
+  texts.forEach(t => { String(t||"").replace(GRE, m => { if (!found.includes(m)) found.push(m); return m; }); });
+  if (!found.length) return "";
+  return `<details class="gbox"><summary>📖 むずかしい言葉の意味</summary><dl>${found.map(m=>`<dt>${m}</dt><dd>${GLOSS[m]}</dd>`).join("")}</dl></details>`;
+}
+function gtapEl(el){
+  const n = el.nextElementSibling;
+  if (n && n.classList.contains("gtip")) { n.remove(); return; }
+  el.insertAdjacentHTML("afterend", `<span class="gtip">💡 ${GLOSS[el.dataset.g]}</span>`);
+}
+function gtap(ev, el){ ev.stopPropagation(); ev.preventDefault(); gtapEl(el); }
 function explain(q, ok, pickI){
   const head = `<div class="verdict ${ok?"ok":"ng"}"><span class="vface">${luna(ok?"happy":"sad")}</span><div><b>${ok?"⭕ 正解！":"❌ ざんねん…"}</b><span>${ok?"さすが！ポイントをおさらいだワン":"だいじょうぶ、ここで覚えればOKだワン"}</span></div></div>`;
   // 「正解！」「ざんねん…」の見出しは出さない（選択肢の⭕❌で十分なため）
@@ -680,12 +810,12 @@ function fmt(ds){ const [y,m,d]=ds.split("-"); return `${+m}月${+d}日`; }
 function rich(t){ return String(t).replace(/\*\*(.+?)\*\*/g, "<b class=\"kw\">$1</b>"); }
 function column(q){
   if (!q.col) return "";
-  return `<details class="colbox"><summary><span class="colface">${luna("normal")}</span><span class="cst"><small>📖 ルナのひとくちコラム</small><b>${q.colt||"もっと知りたい人へ"}</b><span class="tz">${teaser(q.col)} <em>つづきを読む ▼</em></span></span><span class="open">読む ▼</span></summary><p>${rich(q.col)}</p></details>`;
+  return `<details class="colbox"><summary><span class="colface">${luna("normal")}</span><span class="cst"><small>📖 ルナのひとくちコラム</small><b>${q.colt||"もっと知りたい人へ"}</b><span class="tz">${teaser(q.col)} <em>つづきを読む ▼</em></span></span><span class="open">読む ▼</span></summary><p>${gloss(rich(q.col),"paren")}</p></details>`;
 }
 function tips(q, noOk){
   let h = "";
-  if (q.ng) h += `<div class="ngbox"><div class="tt">🚫 しちゃダメ！</div>${q.ng}${q.e?`<button class="hanko" type="button" onclick="this.parentNode.classList.toggle('why')" aria-label="どうしてダメなのか読む">ダメ！</button><span class="hint">おしてね👆</span><div class="ngwhy"><div class="wq">🤔 どうしてダメなの？</div>${rich(q.e)}</div>`:`<span class="hanko">ダメ！</span>`}</div>`;
-  if (q.ok && !noOk) h += `<div class="okbox"><div class="tt">✅ こうする</div>${q.ok}</div>`;
+  if (q.ng) h += `<div class="ngbox"><div class="tt">🚫 しちゃダメ！</div>${gloss(q.ng,"tap")}${q.e?`<button class="hanko" type="button" onclick="this.parentNode.classList.toggle('why')" aria-label="どうしてダメなのか読む">ダメ！</button><span class="hint">おしてね👆</span><div class="ngwhy"><div class="wq">🤔 どうしてダメなの？</div>${gloss(rich(q.e),"paren")}</div>`:`<span class="hanko">ダメ！</span>`}</div>`;
+  if (q.ok && !noOk) h += `<div class="okbox"><div class="tt">✅ こうする</div>${gloss(q.ok,"tap")}</div>`;
   return h;
 }
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
@@ -787,9 +917,9 @@ function showQ(){
   $("app").innerHTML = `<div class="card">${dots()}
     ${scene(q)}<div class="qnum">${q.label} / ${S.qs.length}${q.news?` <span class="newb">🆕 最近の手口</span>`:""}</div>
     <div class="qtext">${q.q}</div>
-    <div class="choices">${q.c.map((t,i)=>`<button class="choice" data-i="${i}">${t}</button>`).join("")}</div>
+    <div class="choices">${q.c.map((t,i)=>`<button class="choice" data-i="${i}">${t}</button>`).join("")}</div>${glossList([q.q, ...q.c])}
     <div id="res"></div></div>`;
-  document.querySelectorAll(".choice").forEach(b => b.onclick = () => answer(+b.dataset.i));
+  document.querySelectorAll(".choice").forEach(b => b.onclick = (ev) => { const g = ev.target && ev.target.closest ? ev.target.closest(".gw") : null; if (g){ ev.preventDefault(); gtapEl(g); return; } answer(+b.dataset.i); });
   if (firstShow) firstShow = false; else toLuna();
 }
 
@@ -801,7 +931,7 @@ function answer(i){
   if (i !== q.a){
     btn.disabled = true; btn.classList.add("wrong");
     btn.insertAdjacentHTML("afterbegin", `<span class="cmark">❌</span>`);
-    if (q.w && q.w[i]) btn.insertAdjacentHTML("beforeend", `<div class="cwhy"><span class="cwh">🤔 なぜ違うの？</span>${rich(q.w[i])}</div>`);
+    if (q.w && q.w[i]) btn.insertAdjacentHTML("beforeend", `<div class="cwhy"><span class="cwh">🤔 なぜ違うの？</span>${gloss(rich(q.w[i]),"paren")}</div>`);
     $("res").innerHTML = `<div class="retry">🐾 ほかの答えも選んでみよう！</div>`;
     btn.scrollIntoView({behavior:"smooth", block:"nearest"});
     return;
@@ -878,8 +1008,8 @@ function showSummary(){
     <details class="more rvmore"><summary><span class="qh">📚 問題ごとにふりかえる ▼</span></summary>
     <div class="review">${S.qs.map((q,i)=>`<div class="item ${p[i]===q.a?"iok":"ing"}">
       <div class="ihead"><span class="inum">${q.label}</span><span class="ires">${p[i]===q.a?"⭕ 正解":"❌ まちがい"}</span></div>
-      <div class="iq">${q.q}</div>${q.scene?`<div class="qmsg">${q.scene.t==="call"?"📞":q.scene.t==="popup"?"⚠️":"💬"} ${esc(q.scene.msg)}</div>`:""}
-      ${p[i]===q.a ? "" : `<div class="mine ngtxt">あなたの選んだ回答：${q.c[p[i]]}</div>${q.w&&q.w[p[i]]?`<div class="whysm">🤔 ${rich(q.w[p[i]])}</div>`:""}`}
+      <div class="iq">${gloss(q.q,"tap")}</div>${q.scene?`<div class="qmsg">${q.scene.t==="call"?"📞":q.scene.t==="popup"?"⚠️":"💬"} ${esc(q.scene.msg)}</div>`:""}
+      ${p[i]===q.a ? "" : `<div class="mine ngtxt">あなたの選んだ回答：${q.c[p[i]]}</div>${q.w&&q.w[p[i]]?`<div class="whysm">🤔 ${gloss(rich(q.w[p[i]]),"paren")}</div>`:""}`}
       <div class="a">答え：${q.c[q.a]}</div>
       ${tips(q)}${column(q)}</div>`).join("")}</div>
     </details>
