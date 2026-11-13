@@ -656,6 +656,7 @@ const GLOSS = {
   "警察庁推奨アプリ": "警察庁が詐欺対策にすすめるアプリ",
   "ネットバンク": "ネットで残高を見たり振込したりできる銀行",
   "QRコード": "スマホのカメラで読む、白黒の四角いもよう",
+  "NPA": "警察庁を英語で略した名前。だれでもこの名前でSMSを送れるので、本物の証拠にはならない",
   // __GLOSS_END__
 };
 const GKEYS = Object.keys(GLOSS).sort((a,b)=>b.length-a.length);
@@ -710,7 +711,7 @@ function glossList(texts){
   const found = [];
   texts.forEach(t => { String(t||"").replace(GRE, m => { if (!found.includes(m)) found.push(m); return m; }); });
   if (!found.length) return "";
-  return `<details class="gbox"><summary>📖 むずかしい言葉の意味</summary><dl>${found.map(m=>`<dt>${m}</dt><dd>${GLOSS[m]}</dd>`).join("")}</dl></details>`;
+  return `<details class="gbox"><summary>📖 むずかしい言葉の意味（${found.length}）</summary><dl>${found.map(m=>`<dt>${m}</dt><dd>${GLOSS[m]}</dd>`).join("")}</dl></details>`;
 }
 function gtapEl(el){
   const n = el.nextElementSibling;
@@ -940,7 +941,7 @@ function showQ(){
   $("app").innerHTML = `<div class="card">${dots()}
     ${scene(q)}<div class="qnum">${q.label} / ${S.qs.length}${q.news?` <span class="newb">🆕 最近の手口</span>`:""}</div>
     <div class="qtext">${q.q}</div>
-    <div class="choices">${q.c.map((t,i)=>`<button class="choice" data-i="${i}">${t}</button>`).join("")}</div>${glossList([q.q, ...q.c])}
+    <div class="choices">${q.c.map((t,i)=>`<button class="choice" data-i="${i}">${t}</button>`).join("")}</div>${glossList([q.q, ...q.c, q.scene ? (q.scene.from||"")+" "+(q.scene.msg||"")+" "+(q.scene.subj||"") : ""])}
     <div id="res"></div></div>`;
   document.querySelectorAll(".choice").forEach(b => b.onclick = (ev) => { const g = ev.target && ev.target.closest ? ev.target.closest(".gw") : null; if (g){ ev.preventDefault(); gtapEl(g); return; } answer(+b.dataset.i); });
   if (firstShow) firstShow = false; else toLuna();
